@@ -21,22 +21,34 @@ const routes: Routes = [
     canActivate:[AuthGuard]
   },
   {
-    path: 'sistema',
-    loadChildren: () => import('./pages/sistema/sistema.module').then(m => m.SistemaModule),
+    path: 'franquia',
+    loadChildren: () => import('./pages/franquia/franquia.module').then(m => m.FranquiaModule),
     canActivate:[AuthGuard]
   }
   ,
   {
-    path: 'categoria',
-    loadChildren: () => import('./pages/categoria/categoria.module').then(m => m.CategoriaModule),
+    path: 'funcionario',
+    loadChildren: () => import('./pages/funcionario/funcionario.module').then(m => m.FuncionarioModule),
     canActivate:[AuthGuard]
   }
   ,
   {
-    path: 'despesa',
-    loadChildren: () => import('./pages/despesa/despesa.module').then(m => m.DespesaModule),
+    path: 'cliente',
+    loadChildren: () => import('./pages/cliente/cliente.module').then(m => m.ClienteModule),
     canActivate:[AuthGuard]
   }
+  ,
+  {
+    path: 'veiculo',
+    loadChildren: () => import('./pages/veiculo/veiculo.module').then(m => m.VeiculoModule),
+    canActivate:[AuthGuard]
+  }
+  ,
+  {
+    path: 'infracao',
+    loadChildren: () => import('./pages/infracao/infracao.module').then(m => m.InfracaoModule),
+    canActivate:[AuthGuard]
+  }  
 ];
 
 @NgModule({

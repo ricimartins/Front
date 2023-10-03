@@ -1,0 +1,128 @@
+<navbar></navbar>
+<sidebar></sidebar>
+
+<div *ngIf="tipoTela == 2" class="container-base">
+    
+    <div class="content-page">
+        <div class="card-header">
+            <div class="card-title">
+                Cadastro de Infracões
+            </div>
+            <div (click)="ListagemInfracoes()" class="card-menu">Listagem de Infracões</div>
+        </div>         
+    
+        <form class="form-page" [formGroup]="infracaoForm" (submit)="enviar()" >
+            <div class="row">
+                <div class="group-row">
+                    <label>Nome</label>
+                    <input type="text" name="name" id="name" placeholder="Nome" formControlName="name" required />
+                    <label class="error-input" *ngIf="infracaoForm.get('name')?.errors?.['required'] &&
+                    infracaoForm.get('name')?.touched">
+                        Campo Obrigatório!
+                    </label>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="group-row">
+                    <label>Pontuação</label>
+                    <input type="text" name="pontuacao" id="pontuacao" placeholder="Pontuação" formControlName="pontuacao" required />
+                    <label class="error-input" *ngIf="infracaoForm.get('pontuacao')?.errors?.['required'] &&
+                    infracaoForm.get('pontuacao')?.touched">
+                        Campo Obrigatório!
+                    </label>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="group-row">
+                    <label>Veiculo</label>
+                    <ng-select class="select-padrao" formControlName="veiculoSelect" [(ngModel)]="veiculoSelect" [items]="listVeiculos" bindLabel="name" [multiple]="false" [clearable]="false" [searchable]="false"></ng-select>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="group-row">
+                    <label>Multa</label>
+                    <ng-select class="select-padrao" formControlName="multaSelect" [(ngModel)]="multaSelect" [items]="listMultas" bindLabel="name" [multiple]="false" [clearable]="false" [searchable]="false"></ng-select>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="group-row">
+                    <label>Condutor</label>
+                    <ng-select class="select-padrao" formControlName="condutorSelect" [(ngModel)]="condutorSelect" [items]="listCondutores" bindLabel="name" [multiple]="false" [clearable]="false" [searchable]="false"></ng-select>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="group-row">
+                    <input type="submit" value="Salvar" class="btn-primary" />
+                </div>
+            </div>
+        </form>
+    </div>
+
+</div>
+
+<div *ngIf="tipoTela == 1" class="container-base">
+
+    <div class="content-page">
+
+        <div class="header-info-2">
+            <div class="card-header">
+                <div class="card-title">Listagem de Infracoes</div>
+                <div (click)="cadastro()" class="card-menu">Cadastro de Infracoes</div>
+            </div>
+
+
+            <table cellspacing="0" cellpadding="0">
+                <thead>
+                    <tr>
+                        <!-- <td></td> -->
+                        <td>Código</td>
+                        <td>Nome</td>
+                        <td>Veiculo</td>
+                        <td>Multa</td>
+                        <td>Condutor</td>
+                        <td>Ação</td>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="select-item" *ngFor="let item of tableListInfracoes | paginate: config; let i = index"
+                        class="linha-table" [ngClass]="{'linha-cinza' : i % 2 == 0, 'linha-branca' : i % 2 !== 0}">
+
+                        <td>{{item.Id}}</td>
+                        <td>{{item.Nome}}</td>
+                        <td>{{item.Veiculo.Nome}}</td>
+                        <td>{{item.Multa.Nome}}</td>
+                        <td>{{item.Condutor.Nome}}</td>
+                        
+                        <td> Edit</td>
+
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="tabela-footer" *ngIf="paginacao && tableListInfracoes">
+                <label class="mostrar">Mostrar</label>
+                <ng-select (change)="mudarItemsPorPage()" [(ngModel)]="itemsPorPagina" [clearable]="false"
+                    [searchable]="false" class="mostrar-drop">
+                    <ng-option [value]="10">10</ng-option>
+                    <ng-option [value]="50">50</ng-option>
+                    <ng-option [value]="100">100</ng-option>
+                </ng-select>
+
+                <div class="container-pagination">
+                    <pagination-controls id="{{this.id}}" previousLabel="Anterior" nextLabel="Próximo"
+                        [responsive]="true" (pageChange)="mudarPage($event)">
+                    </pagination-controls>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

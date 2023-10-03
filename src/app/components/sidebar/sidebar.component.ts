@@ -20,14 +20,20 @@ constructor(private router : Router, public menuService: MenuService)
         this.router.navigate(['/dashboard']);
         break;
       case 2:
-        this.router.navigate(['/sistema']);
+        this.router.navigate(['/franquia']);
         break;        
       case 3:
-        this.router.navigate(['/categoria']);
+        this.router.navigate(['/funcionario']);
         break;  
       case 4:
-        this.router.navigate(['/despesa']);
+        this.router.navigate(['/cliente']);
         break;
+      case 5:
+        this.router.navigate(['/veiculo']);
+        break;
+      case 6:
+          this.router.navigate(['/infracao']);
+          break;        
       case 100:
         localStorage.clear();          
         this.router.navigate(['/login']);

@@ -1,0 +1,167 @@
+<navbar></navbar>
+<sidebar></sidebar>
+<div *ngIf="tipoTela == 2" class="container-base">
+    <div class="content-page">
+        <div class="card-header">
+            <div class="card-title">
+                Cadastro de Clientes
+            </div>
+            <div (click)="ListagemClientes()" class="card-menu">Listagem de Clientes</div>
+        </div>         
+    
+        <form class="form-page" [formGroup]="clienteForm" (submit)="enviar()" >
+            <div class="row">
+                <div class="group-row">
+                    <label>Nome</label>
+                    <input type="text" name="name" id="name" placeholder="Nome" formControlName="name" required />
+                    <label class="error-input" *ngIf="clienteForm.get('name')?.errors?.['required'] &&
+                    clienteForm.get('name')?.touched">
+                        Campo Obrigatório!
+                    </label>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="group-row">
+                    <label>Tipo de documento</label>
+                    <input type="text" name="tipoDocumento" id="tipoDocumento" placeholder="Tipo de Documento" formControlName="tipoDocumento" required />                    
+                    <label class="error-input" *ngIf="clienteForm.get('tipoDocumento')?.errors?.['required'] &&
+                    clienteForm.get('tipoDocumento')?.touched">
+                        Campo Obrigatório!
+                    </label>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="group-row">
+                    <label>Documento</label>
+                    <input type="text" name="documento" id="documento" placeholder="Nº do Documento" formControlName="documento" required />
+                    <label class="error-input" *ngIf="clienteForm.get('documento')?.errors?.['required'] &&
+                    clienteForm.get('documento')?.touched">
+                        Campo Obrigatório!
+                    </label>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="group-row">
+                    <label>Telefone</label>
+                    <input type="text" name="telefone" id="telefone" placeholder="Telefone" formControlName="telefone" required />
+                    <label class="error-input" *ngIf="clienteForm.get('telefone')?.errors?.['required'] &&
+                    clienteForm.get('telefone')?.touched">
+                        Campo Obrigatório!
+                    </label>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="group-row">
+                    <label>E-mail</label>
+                    <input type="text" name="email" id="email" placeholder="E-mail" formControlName="email" required />
+                    <label class="error-input" *ngIf="clienteForm.get('email')?.errors?.['required'] &&
+                    clienteForm.get('email')?.touched">
+                        Campo Obrigatório!
+                    </label>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="group-row">
+                    <label>Endereço completo</label>
+                    <input type="text" name="endereco" id="endereco" placeholder="Endereco" formControlName="endereco" required />
+                    <label class="error-input" *ngIf="clienteForm.get('endereco')?.errors?.['required'] &&
+                    clienteForm.get('name')?.touched">
+                        Campo Obrigatório!
+                    </label>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="group-row">
+                    <label>Data de nascimento</label>
+                    <input type="date" name="dataNascimento" id="dataNascimento" placeholder="Data de nascimento" formControlName="dataNascimento" required />
+                    <label class="error-input" *ngIf="clienteForm.get('dataNascimento')?.errors?.['required'] &&
+                    clienteForm.get('dataNascimento')?.touched">
+                        Campo Obrigatório!
+                    </label>
+                </div>
+            </div>
+                        
+            <div class="row">
+                <div class="group-row">
+                    <label>Franquia</label>
+                    <ng-select class="select-padrao" formControlName="franquiaSelect" [(ngModel)]="franquiaSelect" [items]="listFranquias" bindLabel="name" [multiple]="false" [clearable]="false" [searchable]="false"></ng-select>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="group-row">
+                    <input type="submit" value="Salvar" class="btn-primary" />
+                </div>
+            </div>
+        </form>
+    </div>
+
+</div>
+
+<div *ngIf="tipoTela == 1" class="container-base">
+
+    <div class="content-page">
+
+        <div class="header-info-2">
+            <div class="card-header">
+                <div class="card-title">Listagem de Clientes</div>
+                <div (click)="cadastro()" class="card-menu">Cadastro de Clientes</div>
+            </div>
+
+
+            <table cellspacing="0" cellpadding="0">
+                <thead>
+                    <tr>
+                        <!-- <td></td> -->
+                        <td>Código</td>
+                        <td>Nome</td>
+                        <td>E-mail</td>
+                        <td>Telefone</td>
+                        <td>Franquia</td>
+                        <td>Ação</td>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="select-item" *ngFor="let item of tableListClientes | paginate: config; let i = index"
+                        class="linha-table" [ngClass]="{'linha-cinza' : i % 2 == 0, 'linha-branca' : i % 2 !== 0}">
+
+                        <td>{{item.Id}}</td>
+                        <td>{{item.Nome}}</td>
+                        <td>{{item.Email}}</td>
+                        <td>{{item.Telefone}}</td>
+                        <td>{{item.Franquia.Nome}}</td>
+
+                        <td> Edit</td>
+
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="tabela-footer" *ngIf="paginacao && tableListClientes">
+                <label class="mostrar">Mostrar</label>
+                <ng-select (change)="mudarItemsPorPage()" [(ngModel)]="itemsPorPagina" [clearable]="false"
+                    [searchable]="false" class="mostrar-drop">
+                    <ng-option [value]="10">10</ng-option>
+                    <ng-option [value]="50">50</ng-option>
+                    <ng-option [value]="100">100</ng-option>
+                </ng-select>
+
+                <div class="container-pagination">
+                    <pagination-controls id="{{this.id}}" previousLabel="Anterior" nextLabel="Próximo"
+                        [responsive]="true" (pageChange)="mudarPage($event)">
+                    </pagination-controls>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

@@ -54,6 +54,10 @@ export class AuthService {
         localStorage.setItem('emailUser', email);
     }
 
+    setFranquiaUser(franquiaId:string){
+        localStorage.setItem('franquiaId', franquiaId);
+    }
+
     getEmailUser(){
         var emailUserLogado = localStorage.getItem('emailUser');
         if(emailUserLogado){
