@@ -13,6 +13,7 @@ import { FranquiaService } from 'src/app/services/franquia.service';
   templateUrl: './cliente.component.html',
   styleUrls: ['./cliente.component.scss']
 })
+
 export class ClienteComponent {
 
   constructor(public menuService: MenuService, public formBuilder: FormBuilder,

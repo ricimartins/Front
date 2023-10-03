@@ -1,16 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ClienteComponent } from './cliente.component';
+import { MultaComponent } from './multa.component';
 
-describe('ClienteComponent', () => {
-  let component: ClienteComponent;
-  let fixture: ComponentFixture<ClienteComponent>;
+describe('MultaComponent', () => {
+  let component: MultaComponent;
+  let fixture: ComponentFixture<MultaComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [ClienteComponent]
+      declarations: [MultaComponent]
     });
-    fixture = TestBed.createComponent(ClienteComponent);
+    fixture = TestBed.createComponent(MultaComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

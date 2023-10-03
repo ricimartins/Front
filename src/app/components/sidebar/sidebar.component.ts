@@ -34,6 +34,9 @@ constructor(private router : Router, public menuService: MenuService)
       case 6:
           this.router.navigate(['/infracao']);
           break;        
+        case 7:
+          this.router.navigate(['/multa']);
+          break;        
       case 100:
         localStorage.clear();          
         this.router.navigate(['/login']);

@@ -48,6 +48,12 @@ const routes: Routes = [
     path: 'infracao',
     loadChildren: () => import('./pages/infracao/infracao.module').then(m => m.InfracaoModule),
     canActivate:[AuthGuard]
+  }
+  ,
+  {
+    path: 'multa',
+    loadChildren: () => import('./pages/multa/multa.module').then(m => m.MultaModule),
+    canActivate:[AuthGuard]
   }  
 ];
 
