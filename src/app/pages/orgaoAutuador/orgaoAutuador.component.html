@@ -1,0 +1,108 @@
+<navbar></navbar>
+<sidebar></sidebar>
+
+
+<div *ngIf="tipoTela == 2" class="container-base">
+
+    <div class="content-page">
+        <div class="card-header">
+            <div class="header-info-2">
+                <div class="card-header">
+                    <div class="card-title"> Cadastro de Orgão Autuador </div>
+                    <div (click)="ListaOrgaoAutuador()" class="card-menu">Listagem de Orgão Autuador</div>
+                </div>
+            </div>
+        </div>
+
+        <form class="form-page" [formGroup]="orgaoautuadorForm" (submit)="enviar()">
+
+            <div class="row">
+                <div class="group-row">
+                    <label>Nome do Orgão Autuador</label>
+                    <input type="text" name="name" id="name" placeholder="Nome" formControlName="name" required />
+                    <label class="error-input" *ngIf="orgaoautuadorForm.get('name')?.errors?.['required'] &&
+                    orgaoautuadorForm.get('name')?.touched">
+                        Campo Obrigatório!
+                    </label>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="group-row">
+                    <label>UF</label>
+                    <input type="text" name="uf" id="uf" placeholder="UF" formControlName="uf" required />
+                    <label class="error-input" *ngIf="orgaoautuadorForm.get('cnpj')?.errors?.['required'] &&
+                    orgaoautuadorForm.get('cnpj')?.touched">
+                        Campo Obrigatório!
+                    </label>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="group-row">
+                    <input type="submit" value="Salvar" class="btn-primary" />
+                </div>
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+<div *ngIf="tipoTela == 1" class="container-base">
+
+    <div class="content-page">
+
+        <div class="header-info-2">
+            <div class="card-header">
+                <div class="card-title">Listagem de Orgão Autuador</div>
+                <div (click)="cadastro()" class="card-menu">Cadastro de Orgão Autuador</div>
+            </div>
+
+
+            <table cellspacing="0" cellpadding="0">
+                <thead>
+                    <tr>
+                        <!-- <td></td> -->
+                        <td>Código</td>
+                        <td>Nome</td>
+                        <td>UF</td>
+                        <td>Ação</td>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="select-item" *ngFor="let item of tableListOrgaoAutuadors | paginate: config; let i = index"
+                        class="linha-table" [ngClass]="{'linha-cinza' : i % 2 == 0, 'linha-branca' : i % 2 !== 0}">
+
+                        <td>{{item.Id}}</td>
+                        <td>{{item.Nome}}</td>
+                        <td>{{item.UF}}</td>    
+                        <td> Edit</td>
+
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="tabela-footer" *ngIf="paginacao && tableListOrgaoAutuadors">
+                <label class="mostrar">Mostrar</label>
+                <ng-select (change)="mudarItemsPorPage()" [(ngModel)]="itemsPorPagina" [clearable]="false"
+                    [searchable]="false" class="mostrar-drop">
+                    <ng-option [value]="10">10</ng-option>
+                    <ng-option [value]="50">50</ng-option>
+                    <ng-option [value]="100">100</ng-option>
+                </ng-select>
+
+                <div class="container-pagination">
+                    <pagination-controls id="{{this.id}}" previousLabel="Anterior" nextLabel="Próximo"
+                        [responsive]="true" (pageChange)="mudarPage($event)">
+                    </pagination-controls>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

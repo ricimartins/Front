@@ -54,6 +54,11 @@ const routes: Routes = [
     path: 'multa',
     loadChildren: () => import('./pages/multa/multa.module').then(m => m.MultaModule),
     canActivate:[AuthGuard]
+  },
+  {
+    path: 'orgaoAutuador',
+    loadChildren: () => import('./pages/orgaoAutuador/orgaoAutuador.module').then(m => m.OrgaoAutuadorModule),
+    canActivate:[AuthGuard]
   }  
 ];
 

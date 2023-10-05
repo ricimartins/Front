@@ -23,7 +23,6 @@ const RxJS = [LoaderInterceptor, HTTPStatus];
   declarations: [
     AppComponent,
     LoginComponent
-  
   ],
   imports: [
     BrowserModule,
