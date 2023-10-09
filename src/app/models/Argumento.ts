@@ -5,4 +5,5 @@ export class Argumento extends Base{
     Descricao: string;
     MultaId: number;
     Multa: Multa;
+    Anexo: string;
 }

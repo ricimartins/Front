@@ -59,6 +59,11 @@ const routes: Routes = [
     path: 'orgaoAutuador',
     loadChildren: () => import('./pages/orgaoAutuador/orgaoAutuador.module').then(m => m.OrgaoAutuadorModule),
     canActivate:[AuthGuard]
+  },
+  {
+    path: 'argumento',
+    loadChildren: () => import('./pages/argumento/argumento.module').then(m => m.ArgumentoModule),
+    canActivate:[AuthGuard]
   }  
 ];
 

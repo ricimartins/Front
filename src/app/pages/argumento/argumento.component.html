@@ -1,0 +1,119 @@
+<navbar></navbar>
+<sidebar></sidebar>
+<div *ngIf="tipoTela == 2" class="container-base">
+    <div class="content-page">
+        <div class="card-header">
+            <div class="card-title">
+                Cadastro de Argumentos
+            </div>
+            <div (click)="ListagemArgumentos()" class="card-menu">Listagem de Argumentos</div>
+        </div>         
+    
+        <form class="form-page" [formGroup]="argumentoForm" (submit)="enviar()" >
+            <div class="row">
+                <div class="group-row">
+                    <label>Nome</label>
+                    <input type="text" name="name" id="name" placeholder="Nome" formControlName="name" required />
+                    <label class="error-input" *ngIf="argumentoForm.get('name')?.errors?.['required'] &&
+                    argumentoForm.get('name')?.touched">
+                        Campo Obrigatório!
+                    </label>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="group-row">
+                    <label>Descrição</label>
+                    <input type="text" name="descricao" id="descricao" placeholder="Descrição" formControlName="descricao" required />
+                    <label class="error-input" *ngIf="argumentoForm.get('descricao')?.errors?.['required'] &&
+                    argumentoForm.get('descricao')?.touched">
+                        Campo Obrigatório!
+                    </label>
+                </div>
+            </div>            
+
+            <div class="row">
+                <div class="group-row">
+                    <label>Multa</label>
+                    <ng-select class="select-padrao" formControlName="multaSelect" [(ngModel)]="multaSelect" [items]="listMultas" bindLabel="name" [multiple]="false" [clearable]="false" [searchable]="false"></ng-select>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="group-row">
+                    <label>Anexo</label>
+                    <input type="file" class="file-upload" onchange="console.log(event.target.files)" (change)="InputChange($event)" formControlName="anexo" id="anexo" name="anexo" accept = "application/pdf,.csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">                     
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="group-row">
+                    <input type="submit" value="Salvar" class="btn-primary" />
+                </div>
+            </div>
+        </form>
+    </div>
+
+</div>
+
+<div *ngIf="tipoTela == 1" class="container-base">
+
+    <div class="content-page">
+
+        <div class="header-info-2">
+            <div class="card-header">
+                <div class="card-title">Listagem de Argumentos</div>
+                <div (click)="cadastro()" class="card-menu">Cadastro de Argumentos</div>
+            </div>
+
+
+            <table cellspacing="0" cellpadding="0">
+                <thead>
+                    <tr>
+                        <!-- <td></td> -->
+                        <td>Código</td>
+                        <td>Nome</td>
+                        <td>Descrição</td>
+                        <td>Multa</td>
+                        <td>Anexo</td>
+                        <td>Ação</td>
+                        <td>Ação</td>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="select-item" *ngFor="let item of tableListArgumentos | paginate: config; let i = index"
+                        class="linha-table" [ngClass]="{'linha-cinza' : i % 2 == 0, 'linha-branca' : i % 2 !== 0}" >
+
+                        <td>{{item.Id}}</td>
+                        <td>{{item.Nome}}</td>
+                        <td>{{item.Descricao}}</td>
+                        <td>{{item.Multa.Nome}}</td>
+                        <td>Baixar</td>
+                        <td (click)="OnclickEdit(item)">Editar</td>
+                        <td (click)="OnclickDelete(item)">Excluir</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="tabela-footer" *ngIf="paginacao && tableListArgumentos">
+                <label class="mostrar">Mostrar</label>
+                <ng-select (change)="mudarItemsPorPage()" [(ngModel)]="itemsPorPagina" [clearable]="false"
+                    [searchable]="false" class="mostrar-drop">
+                    <ng-option [value]="10">10</ng-option>
+                    <ng-option [value]="50">50</ng-option>
+                    <ng-option [value]="100">100</ng-option>
+                </ng-select>
+
+                <div class="container-pagination">
+                    <pagination-controls id="{{this.id}}" previousLabel="Anterior" nextLabel="Próximo"
+                        [responsive]="true" (pageChange)="mudarPage($event)">
+                    </pagination-controls>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

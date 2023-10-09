@@ -107,7 +107,7 @@ franquiaSelect = new SelectModel();
     }
 
     enviar(){
-      debugger;
+      
       var dados = this.dadosForm();      
 
       let item = new Funcionario();

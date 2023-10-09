@@ -15,7 +15,6 @@ import { AuthGuard } from './pages/guards/auth-guard.service';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 
-
 const RxJS = [LoaderInterceptor, HTTPStatus];
 
 

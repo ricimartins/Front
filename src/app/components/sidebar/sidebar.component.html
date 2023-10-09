@@ -50,6 +50,12 @@
                 Orgão Autuador
             </div>            
         </div>
+        <div class="container-icone-menu">            
+            <div class="caixa-menu caixa-menu-texto" (click)="selectMenu(9)" 
+            [ngClass]="{'caixa-menu-select' : this.menuService.menuSelecionado == 9, '' : this.menuService.menuSelecionado != 9 }" >                
+                Argumento
+            </div>            
+        </div>
     </div>
     <div class="grupo-menu">
         <div class="container-icone-menu">

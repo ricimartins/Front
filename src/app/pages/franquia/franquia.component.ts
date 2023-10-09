@@ -105,7 +105,7 @@ export class FranquiaComponent {
     }
 
     enviar(){
-      debugger;
+      
       var dados = this.dadosForm();      
 
       let item = new Franquia();

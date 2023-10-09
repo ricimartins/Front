@@ -89,7 +89,7 @@ orgaoAutuadorSelect = new SelectModel();
   }
   
   ListagemMultas() {
-    debugger;
+    
     this.tipoTela = 1;
     
     this.multaService.ListarMulta()
@@ -108,7 +108,7 @@ orgaoAutuadorSelect = new SelectModel();
     }
 
     enviar(){
-      debugger;
+      
       var dados = this.dadosForm();      
 
       let item = new Multa();
