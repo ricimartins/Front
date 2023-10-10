@@ -179,14 +179,13 @@ export class ArgumentoComponent {
       }
       else{
         this.argumentoService.AdicionarArgumento(item)
-        .subscribe((response: Argumento) => {
-  
-        this.argumentoForm.reset();                
+        .subscribe((response: Argumento) => {        
 
         }, (error) => console.error(error),
           () => { })
-      }           
+      } 
 
+      this.argumentoForm.reset();                          
     }  
 
     ListarMulta(){

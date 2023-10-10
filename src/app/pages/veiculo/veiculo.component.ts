@@ -7,6 +7,8 @@ import { VeiculoService } from 'src/app/services/veiculo.service';
 import { MenuService } from 'src/app/services/menu.service';
 import { Cliente } from 'src/app/models/Cliente';
 import { ClienteService } from 'src/app/services/cliente.service';
+import { MatTabChangeEvent } from '@angular/material/tabs';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'veiculo',
@@ -17,15 +19,15 @@ export class VeiculoComponent {
 
   constructor(public menuService: MenuService, public formBuilder: FormBuilder,
     public clienteService: ClienteService, public authService: AuthService,
-    public veiculoService: VeiculoService) {}
+    public veiculoService: VeiculoService,private router : Router, 
+    private route: ActivatedRoute) {}
 
 listClientes = new Array<SelectModel>();
 clienteSelect = new SelectModel();
 
   veiculoForm : FormGroup;
 
-  ngOnInit(){
-    debugger
+  ngOnInit(){    
     this.menuService.menuSelecionado = 5;
     
     this.veiculoForm = this.formBuilder.group(
@@ -42,12 +44,15 @@ clienteSelect = new SelectModel();
         }
       )
       this.ListagemVeiculos();        
+      this.ListarCliente();
       this.configpag();
     }
 
-  tipoTela: number = 1;// 1 listagem, 2 cadastro, 3 edição
+  tipoTela: number = 0;// 1 listagem, 2 cadastro, 3 edição
   tableListVeiculos: Array<Veiculo>;
   id: string;
+  // Id selecionado para edição  
+  rowId: number = 0;
 
   page: number = 1;
   config: any;
@@ -77,10 +82,34 @@ clienteSelect = new SelectModel();
 
   cadastro()
   {
-    this.tipoTela = 2;
+    this.tipoTela = 1;
     this.ListarCliente();
     this.veiculoForm.reset();
   }
+
+  tabChanged(tabChangeEvent: MatTabChangeEvent): void {
+    // console.log('tabChangeEvent => ', tabChangeEvent);
+    // console.log('index => ', tabChangeEvent.index);
+    this.tipoTela = tabChangeEvent.index;
+
+    switch(tabChangeEvent.index)
+    {
+      case 0: {
+        this.router.navigate(
+          ['/veiculo']
+        );     
+        this.veiculoForm.reset();
+        break;
+      } 
+      case 1:{        
+        break;
+      }
+      default: 
+        // 
+        break;      
+    }    
+  }
+  
 
   mudarItemsPorPage() {
     this.page = 1
@@ -92,9 +121,57 @@ clienteSelect = new SelectModel();
     this.page = event;
     this.config.currentPage = this.page;
   }
+
+  OnclickEdit(row){      
+      
+    this.loadCadastro(row);
+    this.tipoTela = 1;      
+    
+    this.router.navigate(
+      ['/veiculo'],
+      { queryParams: { 'id': row['Id'], 'action' : 'edit' } }
+    );          
+  }
+
+  OnclickDelete(row){      
+      
+      
+    // this.veiculoService.Delete(row.Id)
+    //   .subscribe((response: Argumento) => {
+        
+    //     this.ListagemArgumentos();
+    //     this.router.navigate(
+    //       ['/argumento']
+    //     );                      
+
+    //   }, (error) => console.error(error),
+    //     () => { })
+  }
+  
+  //Carrega dados do cadastro
+  loadCadastro(row : any)
+  {    
+    this.tipoTela = 1;
+    this.ListarCliente();
+    let clienteSelect = new SelectModel();        
+
+    this.rowId = row.Id;
+    this.veiculoForm.controls["name"].setValue(row.Nome);
+    this.veiculoForm.controls["placa"].setValue(row.Placa);
+    this.veiculoForm.controls["renavam"].setValue(row.Renavam);
+    this.veiculoForm.controls["marca"].setValue(row.Marca);
+    this.veiculoForm.controls["modelo"].setValue(row.Modelo);
+    this.veiculoForm.controls["ano"].setValue(row.Ano);
+    this.veiculoForm.controls["cor"].setValue(row.Cor);
+    this.veiculoForm.controls["chassi"].setValue(row.Chassi);
+
+    clienteSelect.id = row.Cliente.Id;
+    clienteSelect.name = row.Cliente.Nome;
+    this.veiculoForm.controls["clienteSelect"].setValue(clienteSelect);    
+  }
   
   ListagemVeiculos() {
-    this.tipoTela = 1;
+    this.tipoTela = 0;
     
     this.veiculoService.ListarVeiculo()
       .subscribe((response: Array<Veiculo>) => {
@@ -133,7 +210,9 @@ clienteSelect = new SelectModel();
       this.veiculoService.AdicionarVeiculo(item)
         .subscribe((response: Veiculo) => {
   
-      this.veiculoForm.reset();                
+      this.veiculoForm.reset();
+      this.ListagemVeiculos()     
+      alert('Cadastro realizado com sucesso!');
 
       }, (error) => console.error(error),
         () => { })

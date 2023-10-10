@@ -8,6 +8,7 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { NgSelectModule } from "@ng-select/ng-select";
 import { NgxPaginationModule } from "ngx-pagination";
 import { MatIconModule } from '@angular/material/icon';
+import {MatTabsModule} from '@angular/material/tabs';
 
 @NgModule(
     {   
@@ -22,7 +23,8 @@ import { MatIconModule } from '@angular/material/icon';
             ReactiveFormsModule,
             NgSelectModule,
             NgxPaginationModule,
-            MatIconModule
+            MatIconModule,
+            MatTabsModule
         ]
     }
 )

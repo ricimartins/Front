@@ -32,4 +32,9 @@ export class VeiculoService
         return this.httpClient.get(`${this.baseUrl}/ListarVeiculo`);
     }
 
+    ListarVeiculoById(id : number)
+    {
+        return this.httpClient.get(`${this.baseUrl}/ListarVeiculoById?id=${id}`);
+    }
+
 }

@@ -21,7 +21,7 @@ const RxJS = [LoaderInterceptor, HTTPStatus];
 @NgModule({
   declarations: [
     AppComponent,
-    LoginComponent
+    LoginComponent,
   ],
   imports: [
     BrowserModule,

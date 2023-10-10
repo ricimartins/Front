@@ -38,4 +38,17 @@ export class FranquiaService
         return this.httpClient.get(`${this.baseUrl}/ListarFranquia`);
     }
 
+    DeleteFranquia(id: number)
+    {
+        return this.httpClient.delete(`${this.baseUrl}/DeleteFranquia?id=${id}`);
+    }
+
+    ObterFranquia(id: number){
+        return this.httpClient.get(`${this.baseUrl}/ObterFranquia?id=${id}`);
+    }
+
+    AtualizarFranquia(franquia: Franquia){
+        return this.httpClient.put<Franquia>(`${this.baseUrl}/AtualizarFranquia`, franquia);
+    }
+
 }

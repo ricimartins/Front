@@ -30,6 +30,7 @@ input {
 
   font-size: 15px;
   font-family: "Poppins";
+  text-transform: uppercase;
 }
 
 label {
@@ -94,16 +95,18 @@ label {
 
     .form-page {
       display: grid;
-      justify-content: center;
+      grid-template-columns: auto auto auto;
+      justify-content: center;            
 
       .row {
         display: flex;
         justify-content: center;
         align-items: center;
-        padding-bottom: 16px;
-
+        padding-bottom: 16px;        
+        
         .group-row {
           display: grid;
+          padding: 5px;
         }
       }
     }

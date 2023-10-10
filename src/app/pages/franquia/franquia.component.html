@@ -9,7 +9,7 @@
             <div class="header-info-2">
                 <div class="card-header">
                     <div class="card-title"> Cadastro de Franquias </div>
-                    <div (click)="ListaFranquiasUsuario()" class="card-menu">Listagem de Franquias</div>
+                    <div (click)="ListaFranquias()" class="card-menu">Listagem de Franquias</div>
                 </div>
             </div>
         </div>
@@ -58,18 +58,7 @@
                         Campo Obrigatório!
                     </label>
                 </div>
-            </div>
-
-            <div class="row">
-                <div class="group-row">
-                    <label>E-mail</label>
-                    <input type="text" name="email" id="email" placeholder="E-mail" formControlName="email" required />
-                    <label class="error-input" *ngIf="franquiaForm.get('email')?.errors?.['required'] &&
-                    franquiaForm.get('email')?.touched">
-                        Campo Obrigatório!
-                    </label>
-                </div>
-            </div>
+            </div>            
 
             <div class="row">
                 <div class="group-row">
@@ -100,7 +89,8 @@
                         <!-- <td></td> -->
                         <td>Código</td>
                         <td>Nome</td>
-                        <td>Ação</td>
+                        <td>Editar</td>
+                        <td>Excluir</td>
 
                     </tr>
                 </thead>
@@ -110,8 +100,8 @@
 
                         <td>{{item.Id}}</td>
                         <td>{{item.Nome}}</td>
-
-                        <td> Edit</td>
+                        <td (click)="OnclickEdit(item)">Editar</td>
+                        <td (click)="OnclickDelete(item)">Excluir</td>
 
                     </tr>
                 </tbody>
