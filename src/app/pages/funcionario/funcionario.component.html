@@ -96,8 +96,21 @@
                         <td>{{item.Telefone}}</td>
                         <td>{{item.Franquia.Nome}}</td>
 
-                        <td> Edit</td>
-
+                        <td>
+                            <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+                                <mat-icon>menu</mat-icon>
+                              </button>
+                              <mat-menu #menu="matMenu">
+                                <button mat-menu-item (click)="OnclickEdit(item)">
+                                  <mat-icon>edit</mat-icon>
+                                  <span>Alterar</span>
+                                </button>
+                                <button mat-menu-item (click)="openDialog('0ms', '0ms')"disabled>
+                                  <mat-icon>delete</mat-icon>
+                                  <span>Excluir</span>
+                                </button>                                
+                              </mat-menu>
+                        </td>
                     </tr>
                 </tbody>
             </table>

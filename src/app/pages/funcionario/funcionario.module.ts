@@ -8,6 +8,9 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { NgSelectModule } from "@ng-select/ng-select";
 import { NgxPaginationModule } from "ngx-pagination";
 import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from "@angular/material/button";
+import { MatMenuModule } from "@angular/material/menu";
+import { MatDialogModule } from "@angular/material/dialog";
 
 @NgModule(
     {   
@@ -22,8 +25,11 @@ import { MatIconModule } from '@angular/material/icon';
             ReactiveFormsModule,
             NgSelectModule,
             NgxPaginationModule,
-            MatIconModule
-        ]
+            MatIconModule,
+            MatButtonModule,
+            MatMenuModule,
+            MatIconModule,
+            MatDialogModule],        
     }
 )
 

@@ -7,17 +7,20 @@ import { AuthService } from 'src/app/services/auth.service';
 import { FuncionarioService } from 'src/app/services/funcionario.service';
 import { MenuService } from 'src/app/services/menu.service';
 import { FranquiaService } from 'src/app/services/franquia.service';
+import { ActivatedRoute, Router } from '@angular/router';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'funcionario',
   templateUrl: './funcionario.component.html',
-  styleUrls: ['./funcionario.component.scss']
+  styleUrls: ['./funcionario.component.scss'],    
 })
 export class FuncionarioComponent {
 
   constructor(public menuService: MenuService, public formBuilder: FormBuilder,
     public franquiaService: FranquiaService, public authService: AuthService,
-    public funcionarioService: FuncionarioService) {}
+    public funcionarioService: FuncionarioService, private router : Router, 
+    private route: ActivatedRoute, public dialog: MatDialog) {}
 
 listFranquias = new Array<SelectModel>();
 franquiaSelect = new SelectModel();
@@ -147,4 +150,42 @@ franquiaSelect = new SelectModel();
       }         
       )
     }
+
+    OnclickEdit(row){      
+      
+      //this.loadCadastro(row);
+      this.tipoTela = 2;      
+      
+      this.router.navigate(
+        ['/funcionario'],
+        { queryParams: { 'id': row['Id'], 'action' : 'edit' } }
+      );      
+    }
+
+    OnclickDelete(row){      
+      
+      
+      // this.argumentoService.DeleteArgumento(row.Id)
+      //   .subscribe((response: Argumento) => {
+          
+      //     this.ListagemArgumentos();
+      //     this.router.navigate(
+      //       ['/argumento']
+      //     );                      
+
+      //   }, (error) => console.error(error),
+      //     () => { })
+    }    
+
+    openDialog(enterAnimationDuration: string, exitAnimationDuration: string): void {
+      this.dialog.open(DialogAnimationsDialog, {
+        width: '250px',
+        enterAnimationDuration,
+        exitAnimationDuration,
+      });
+    }        
+}
+
+export class DialogAnimationsDialog {
+  constructor(public dialogRef: MatDialogRef<DialogAnimationsDialog>) {}
 }
