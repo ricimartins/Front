@@ -42,8 +42,8 @@ export class FranquiaFuncionarioService
         return this.httpClient.delete(`${this.baseUrl}/DeleteFranquiaFuncionario?id=${id}`);
     }
 
-    ObterFranquiaFuncionario(id: number){
-        return this.httpClient.get(`${this.baseUrl}/ObterFranquiaFuncionario?id=${id}`);
+    ObterFranquiaFuncionario(funcionarioId: number){
+        return this.httpClient.get(`${this.baseUrl}/ObterFranquiaFuncionario?funcionarioId=${funcionarioId}`);
     }
 
     AtualizarFranquiaFuncionario(franquiafuncionario: FranquiaFuncionario){

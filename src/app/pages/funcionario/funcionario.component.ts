@@ -21,9 +21,8 @@ export class FuncionarioComponent {
 
   constructor(public menuService: MenuService, public formBuilder: FormBuilder,
     public franquiaService: FranquiaService, public authService: AuthService,
-    public funcionarioService: FuncionarioService, public franquiafuncionarioService: FranquiaFuncionarioService,
-    private router : Router, 
-    private route: ActivatedRoute, public dialog: MatDialog) {}
+    public funcionarioService: FuncionarioService, public franquiaFuncionarioService: FranquiaFuncionarioService,
+    private router : Router, private route: ActivatedRoute, public dialog: MatDialog) {}
 
   
   //#region Variáveis globais
@@ -42,7 +41,7 @@ export class FuncionarioComponent {
   itemsPorPagina: number = 10
   rowId : number = 0;
   dropdownListFranquia : Array<Franquia>;
-  selectedItemsFranquia : Array<FranquiaFuncionario>;
+  selectedItemsFranquia : Array<Franquia>;
   dropdownSettingsFranquia = {};
   //#endregion
 
@@ -103,7 +102,7 @@ export class FuncionarioComponent {
     this.tipoTela = 2;
     this.ListarFranquia();
     this.funcionarioForm.reset();
-    this.selectedItemsFranquia = new Array<FranquiaFuncionario>();
+    this.selectedItemsFranquia = new Array<Franquia>();
   }
 
   mudarItemsPorPage() {
@@ -119,6 +118,9 @@ export class FuncionarioComponent {
   
   ListagemFuncionarios() {
     this.tipoTela = 1;
+    this.router.navigate(
+      ['/funcionario']
+    );
     
     this.funcionarioService.ListarFuncionario()
       .subscribe((response: Array<Funcionario>) => {
@@ -145,34 +147,67 @@ export class FuncionarioComponent {
       });      
 
       var dados = this.dadosForm();      
-      let item = new Funcionario();
-      item.Nome = dados["name"].value;
-      item.Id = 0;
-      item.Telefone = dados["telefone"].value;
-      item.Email = dados["email"].value;      
-      item.NomePropriedade = '';
-      item.Mensagem = '';
+      let funcionario = new Funcionario();
+      funcionario.Nome = dados["name"].value;
+      funcionario.Id = 0;
+      funcionario.Telefone = dados["telefone"].value;
+      funcionario.Email = dados["email"].value;      
+      funcionario.NomePropriedade = '';
+      funcionario.Mensagem = '';
 
       if (action === 'edit'){
         //Recupero o Id do registro que estão em edição
-        item.Id = this.rowId;        
+        funcionario.Id = this.rowId;        
         
-        this.funcionarioService.AtualizarFuncionario(item)
+        this.funcionarioService.AtualizarFuncionario(funcionario)
         .subscribe((response: Funcionario) => {
+
+          // Busco as franquias do Funcionário para cadastrar novamente
+          this.franquiaFuncionarioService.ObterFranquiaFuncionario(funcionario.Id)
+            .subscribe((response: Array<FranquiaFuncionario>) => {              
+
+              //Remove todas as franquias atuais
+              response.forEach((currentValue, index) => {
+                this.franquiaFuncionarioService.DeleteFranquiaFuncionario(currentValue.Id)
+                .subscribe((response: Array<FranquiaFuncionario>) => {                                                    
+                }, (error) => console.error(error),
+                () => { })                                
+              });
+
+              this.selectedItemsFranquia.forEach((currentValue, index) => {
+              var franquiaFuncionario = new FranquiaFuncionario();
+              franquiaFuncionario.Id = 0;
+              franquiaFuncionario.FranquiaId = currentValue.Id
+              franquiaFuncionario.FuncionarioId = funcionario.Id;              
+              franquiaFuncionario.Mensagem = '';
+              franquiaFuncionario.NomePropriedade = '';       
+              
+              // Cadastra novamente as franquias do Funcionario
+              this.franquiaFuncionarioService.AdicionarFranquiaFuncionario(franquiaFuncionario)
+              .subscribe((response: FranquiaFuncionario) => {                                
+
+              }, (error) => console.error(error),
+                () => { })
+
+              });
+
+              this.selectedItemsFranquia = new Array<Franquia>();
+              response.forEach((currentValue, index) => {
+                this.selectedItemsFranquia.push(currentValue.Franquia);      
+              });
+
+            }, (error) => console.error(error),
+            () => { })
+
           alert('Alterado com sucesso!')
-          this.ListagemFuncionarios();
-          this.router.navigate(
-            ['/funcionario']
-          );                      
+          this.ListagemFuncionarios();                                
 
         }, (error) => console.error(error),
           () => { })  
       }
       else{
-        this.funcionarioService.AdicionarFuncionario(item)
-          .subscribe((response: Funcionario) => {                    
-          //verifica se existe veículo selecionado
-          if (this.selectedItemsFranquia.length > 0){
+        this.funcionarioService.AdicionarFuncionario(funcionario)
+          .subscribe((response: Funcionario) => {                              
                 
             this.selectedItemsFranquia.forEach((currentValue, index) => {
               //cadastra os veículos selecionados
@@ -184,15 +219,12 @@ export class FuncionarioComponent {
               franquiaFuncionario.Mensagem = '';
               franquiaFuncionario.NomePropriedade = '';       
 
-              this.franquiafuncionarioService.AdicionarFranquiaFuncionario(franquiaFuncionario)
+              this.franquiaFuncionarioService.AdicionarFranquiaFuncionario(franquiaFuncionario)
               .subscribe((response: FranquiaFuncionario) => {                                
 
               }, (error) => console.error(error),
                 () => { })
           });            
-          }
-          else
-            alert('Selecione uma franquia!');
         
           this.funcionarioForm.reset();                
           alert('Cadastrado com sucesso!')  
@@ -201,7 +233,7 @@ export class FuncionarioComponent {
           () => { })
 
       }
-    }  
+    }    
 
     ListarFranquia(){
       
@@ -218,6 +250,7 @@ export class FuncionarioComponent {
     OnclickEdit(row){            
       this.loadCadastro(row);
       this.tipoTela = 2;      
+      this.selectedItemsFranquia = new Array<Franquia>();
       
       this.router.navigate(
         ['/funcionario'],
@@ -229,10 +262,7 @@ export class FuncionarioComponent {
       this.funcionarioService.DeleteFuncionario(row.Id)
         .subscribe((response: Funcionario) => {
           alert('Excluído com sucesso!')
-          this.ListagemFuncionarios();
-          this.router.navigate(
-            ['/funcionario']
-          );                      
+          this.ListagemFuncionarios();          
 
         }, (error) => console.error(error),
           () => { })
@@ -250,6 +280,17 @@ export class FuncionarioComponent {
           this.funcionarioForm.controls["name"].setValue(row.Nome);
           this.funcionarioForm.controls["telefone"].setValue(row.Telefone);
           this.funcionarioForm.controls["email"].setValue(row.Email);
+          this.franquiaFuncionarioService.ObterFranquiaFuncionario(row.Id)
+            .subscribe((response: Array<FranquiaFuncionario>) => {
+              
+              this.selectedItemsFranquia = new Array<Franquia>();
+              response.forEach((currentValue, index) => {
+                this.selectedItemsFranquia.push(currentValue.Franquia);      
+              });
+
+            }, (error) => console.error(error),
+            () => { })
+
           //franquiaSelect.id = row.Franquia.Id;
           //franquiaSelect.name = row.Franquia.Nome;
           //this.funcionarioForm.controls["franquiaSelect"].setValue(franquiaSelect);
@@ -269,10 +310,10 @@ export class FuncionarioComponent {
     
     //#region Métodos dropdown
     onItemSelect(item: any) {      
-      this.selectedItemsFranquia.push(item);      
+      //this.selectedItemsFranquia.push(item);      
     }
     onSelectAll(items: any) {   
-      this.selectedItemsFranquia = new Array<FranquiaFuncionario>();
+      this.selectedItemsFranquia = new Array<Franquia>();
       items.forEach((currentValue, index) => {
         this.selectedItemsFranquia.push(currentValue);      
       });
@@ -283,7 +324,7 @@ export class FuncionarioComponent {
     }
 
     onDeSelectAll(item: any) {      
-      this.selectedItemsFranquia = new Array<FranquiaFuncionario>();
+      this.selectedItemsFranquia = new Array<Franquia>();
     }
     //#endregion
     

@@ -7,8 +7,8 @@ export class FranquiaFuncionario extends Base
   FranquiaId: number;
   FuncionarioId: number;
 
-  Funcionarios: Funcionario;
-  Franquias: Franquia;
+  Funcionario: Funcionario;
+  Franquia: Franquia;
   
 }
 
