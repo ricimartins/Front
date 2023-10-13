@@ -1,170 +1,130 @@
 <navbar></navbar>
 <sidebar></sidebar>
-<div *ngIf="tipoTela == 0" class="container-base">
+<div *ngIf="tipoTela == 2" class="container-base">
     <div class="content-page">
         <div class="card-header">
             <div class="card-title">
                 Cadastro de Clientes
             </div>
             <div (click)="ListagemClientes()" class="card-menu">Listagem de Clientes</div>
-        </div>         
-    
-        <mat-tab-group animationDuration="0ms" (selectedTabChange)="tabChanged($event)" > 
+        </div>
 
-            <mat-tab label="Dados do cliente" id="cliente">
-                <form class="form-page" [formGroup]="clienteForm" (submit)="enviar()" >
-                    <div class="row">
-                        <div class="group-row">
-                            <label>Nome</label>
-                            <input type="text" name="name" id="name" placeholder="Nome" formControlName="name" required />
-                            <label class="error-input" *ngIf="clienteForm.get('name')?.errors?.['required'] &&
+        <form class="form-page" [formGroup]="clienteForm" (submit)="enviar()">
+            <div class="row">
+                <div class="group-row">
+                    <label>Nome</label>
+                    <input type="text" name="name" id="name" placeholder="Nome" formControlName="name" required />
+                    <label class="error-input" *ngIf="clienteForm.get('name')?.errors?.['required'] &&
                             clienteForm.get('name')?.touched">
-                                Campo Obrigatório!
-                            </label>
-                        </div>
-                    </div>            
+                        Campo Obrigatório!
+                    </label>
+                </div>
+            </div>
 
-                    <div class="row">
-                        <div class="group-row">
-                            <label>CPF</label>
-                            <input type="text" name="cpf" id="cpf" placeholder="CPF" formControlName="cpf" required mask="(99) 99999999?9 "/>
-                            <label class="error-input" *ngIf="clienteForm.get('cpf')?.errors?.['required'] &&
+            <div class="row">
+                <div class="group-row">
+                    <label>CPF</label>
+                    <input type="text" name="cpf" id="cpf" placeholder="CPF" formControlName="cpf" required
+                        mask="(99) 99999999?9 " />
+                    <label class="error-input" *ngIf="clienteForm.get('cpf')?.errors?.['required'] &&
                             clienteForm.get('cpf')?.touched">
-                                Campo Obrigatório!
-                            </label>
-                        </div>
-                    </div>
+                        Campo Obrigatório!
+                    </label>
+                </div>
+            </div>
 
-                    <div class="row">
-                        <div class="group-row">
-                            <label>Telefone</label>
-                            <input type="text" name="telefone" id="telefone" placeholder="Telefone" formControlName="telefone" required />
-                            <label class="error-input" *ngIf="clienteForm.get('telefone')?.errors?.['required'] &&
+            <div class="row">
+                <div class="group-row">
+                    <label>Telefone</label>
+                    <input type="text" name="telefone" id="telefone" placeholder="Telefone" formControlName="telefone"
+                        required />
+                    <label class="error-input" *ngIf="clienteForm.get('telefone')?.errors?.['required'] &&
                             clienteForm.get('telefone')?.touched">
-                                Campo Obrigatório!
-                            </label>
-                        </div>
-                    </div>
+                        Campo Obrigatório!
+                    </label>
+                </div>
+            </div>
 
-                    <div class="row">
-                        <div class="group-row">
-                            <label>E-mail</label>
-                            <input type="text" name="email" id="email" placeholder="E-mail" formControlName="email" required />
-                            <label class="error-input" *ngIf="clienteForm.get('email')?.errors?.['required'] &&
+            <div class="row">
+                <div class="group-row">
+                    <label>E-mail</label>
+                    <input type="text" name="email" id="email" placeholder="E-mail" formControlName="email" required />
+                    <label class="error-input" *ngIf="clienteForm.get('email')?.errors?.['required'] &&
                             clienteForm.get('email')?.touched">
-                                Campo Obrigatório!
-                            </label>
-                        </div>
-                    </div>
+                        Campo Obrigatório!
+                    </label>
+                </div>
+            </div>
 
-                    <div class="row">
-                        <div class="group-row">
-                            <label>Endereço completo</label>
-                            <input type="text" name="endereco" id="endereco" placeholder="Endereco" formControlName="endereco" required />
-                            <label class="error-input" *ngIf="clienteForm.get('endereco')?.errors?.['required'] &&
+            <div class="row">
+                <div class="group-row">
+                    <label>Endereço completo</label>
+                    <input type="text" name="endereco" id="endereco" placeholder="Endereco" formControlName="endereco"
+                        required />
+                    <label class="error-input" *ngIf="clienteForm.get('endereco')?.errors?.['required'] &&
                             clienteForm.get('endereco')?.touched">
-                                Campo Obrigatório!
-                            </label>
-                        </div>
-                    </div>
+                        Campo Obrigatório!
+                    </label>
+                </div>
+            </div>
 
-                    <div class="row">
-                        <div class="group-row">
-                            <label>Data de nascimento</label>
-                            <input type="date" name="dataNascimento" id="dataNascimento" placeholder="Data de nascimento" formControlName="dataNascimento" required  />
-                            <label class="error-input" *ngIf="clienteForm.get('dataNascimento')?.errors?.['required'] &&
+            <div class="row">
+                <div class="group-row">
+                    <label>Data de nascimento</label>
+                    <input type="date" name="dataNascimento" id="dataNascimento" placeholder="Data de nascimento"
+                        formControlName="dataNascimento" required />
+                    <label class="error-input" *ngIf="clienteForm.get('dataNascimento')?.errors?.['required'] &&
                             clienteForm.get('dataNascimento')?.touched">
-                                Campo Obrigatório!
-                            </label>
-                        </div>
-                    </div>
-                                
-                    <div class="row">
-                        <div class="group-row">
-                            <label>Franquia</label>
-                            <ng-select class="select-padrao" formControlName="franquiaSelect" [(ngModel)]="franquiaSelect" [items]="listFranquias" bindLabel="name" [multiple]="false" [clearable]="false" [searchable]="false"></ng-select>
-                        </div>
-                    </div>
+                        Campo Obrigatório!
+                    </label>
+                </div>
+            </div>
 
-                    <div class="row">
-                        <div class="group-row">
-                            <ng-multiselect-dropdown
-                                [placeholder]="'Veículos'"
-                                [settings]="dropdownSettingsVeiculos"
-                                [data]="dropdownListVeiculos"
-                                [(ngModel)]="selectedItemsVeiculos"
-                                (onSelect)="onItemSelect($event)"
-                                (onSelectAll)="onSelectAll($event)"
-                                class="dropdown-btn">
-                                </ng-multiselect-dropdown>
-                        </div>
-                    </div>
+            <div class="row">
+                <div class="group-row">
+                    <label>Nº CNH</label>
+                    <input type="text" name="numeroCNH" id="numeroCNH" placeholder="Nº da CNH"
+                        formControlName="numeroCNH" required />
+                    <label class="error-input" *ngIf="clienteForm.get('numeroCNH')?.errors?.['required'] &&
+                            clienteForm.get('numeroCNH')?.touched">
+                        Campo Obrigatório!
+                    </label>
+                </div>
+            </div>
 
-                    <div class="row">
-                        <div class="group-row">
-                            <input type="submit" value="Salvar" class="btn-primary" />
-                        </div>
-                    </div>
-                </form>
-            </mat-tab>
-            <mat-tab label="Veiculos do cliente" id="veiculos">
-                <form class="form-page" [formGroup]="veiculosForm" >
-                <div class="row">
-                    <div class="group-row">
-                        <label>Placa</label>
-                        <input type="text" name="placa" id="placa" placeholder="Placa" formControlName="placa" required  />                        
-                    </div>
-                </div>                                                            
-                <div class="row">
-                    <div class="group-row">
-                        <input type="submit" value="Incluir" class="btn-primary" />
-                    </div>
-                </div>                                
-                <table cellspacing="0" cellpadding="0">
-                    <thead>
-                        <tr>
-                            <!-- <td></td> -->
-                            <td>Código</td>
-                            <td>Placa</td>
-                            <td>Marca</td>
-                            <td>Modelo</td>
-                            <td>Ano</td>
-                            <td>Cor</td>
-                            <td>Ação</td>
-        
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr class="select-item" *ngFor="let item of tableListVeiculos | paginate: config; let i = index"
-                            class="linha-table" [ngClass]="{'linha-cinza' : i % 2 == 0, 'linha-branca' : i % 2 !== 0}">
-        
-                            <td>{{item.Id}}</td>
-                            <td>{{item.Placa}}</td>
-                            <td>{{item.Marca}}</td>
-                            <td>{{item.Modelo}}</td>
-                            <td>{{item.Ano}}</td>
-                            <td>{{item.Cor}}</td>
-                            <td>
-                                <button mat-icon-button [matMenuTriggerFor]="menu">
-                                    <mat-icon>menu</mat-icon>
-                                    </button>
-                                    <mat-menu #menu="matMenu">
-                                    <button mat-menu-item (click)="OnclickEdit(item)">
-                                        <mat-icon>edit</mat-icon>
-                                        <span>Alterar</span>
-                                    </button>
-                                    <button mat-menu-item (click)="OnclickDelete(item)">
-                                        <mat-icon>delete</mat-icon>
-                                        <span>Excluir</span>
-                                    </button>                                
-                                    </mat-menu>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>                    
-            </form>
-            </mat-tab>
-        </mat-tab-group>
+            <div class="row">
+                <div class="group-row">
+                    <label>Data de vencimento da CNH</label>
+                    <input type="date" name="validadeCNH" id="validadeCNH" placeholder="Data de vencimento da CNH"
+                        formControlName="validadeCNH" required />
+                    <label class="error-input" *ngIf="clienteForm.get('validadeCNH')?.errors?.['required'] &&
+                            clienteForm.get('validadeCNH')?.touched">
+                        Campo Obrigatório!
+                    </label>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="group-row">
+                    <ng-multiselect-dropdown [placeholder]="'Selecione...'" formControlName="veiculoSelect"
+                        [settings]="dropdownSettingsVeiculos"
+                        [data]="dropdownListVeiculos"
+                        [(ngModel)]="selectedVeiculos"
+                        (onSelect)="onItemSelect($event)"
+                        (onSelectAll)="onSelectAll($event)"
+                        (onDeSelect)="onDeSelect($event)"
+                        (onDeSelectAll)="onDeSelectAll($event)"
+                        class="dropdown-btn">
+                    </ng-multiselect-dropdown>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="group-row">
+                    <input type="submit" value="Salvar" class="btn-primary" />
+                </div>
+            </div>
+        </form>        
     </div>
 
 </div>
@@ -179,16 +139,14 @@
                 <div (click)="cadastro()" class="card-menu">Cadastro de Clientes</div>
             </div>
 
-
             <table cellspacing="0" cellpadding="0">
                 <thead>
-                    <tr>                        
+                    <tr>
                         <td>Código</td>
                         <td>Nome</td>
                         <td>Data de Nascimento</td>
                         <td>E-mail</td>
-                        <td>Telefone</td>
-                        <td>Franquia</td>
+                        <td>Telefone</td>                        
                         <td>Ação</td>
                     </tr>
                 </thead>
@@ -200,21 +158,21 @@
                         <td>{{item.Nome}}</td>
                         <td>{{item.DataNascimento}}</td>
                         <td>{{item.Email}}</td>
-                        <td>{{item.Telefone}}</td>                        
+                        <td>{{item.Telefone}}</td>
                         <td>
                             <button mat-icon-button [matMenuTriggerFor]="menu">
                                 <mat-icon>menu</mat-icon>
-                              </button>
-                              <mat-menu #menu="matMenu">
+                            </button>
+                            <mat-menu #menu="matMenu">
                                 <button mat-menu-item (click)="OnclickEdit(item)">
-                                  <mat-icon>edit</mat-icon>
-                                  <span>Alterar</span>
+                                    <mat-icon>edit</mat-icon>
+                                    <span>Alterar</span>
                                 </button>
                                 <button mat-menu-item (click)="OnclickDelete(item)">
-                                  <mat-icon>delete</mat-icon>
-                                  <span>Excluir</span>
-                                </button>                                
-                              </mat-menu>
+                                    <mat-icon>delete</mat-icon>
+                                    <span>Excluir</span>
+                                </button>
+                            </mat-menu>
                         </td>
 
                     </tr>

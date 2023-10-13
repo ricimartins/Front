@@ -10,17 +10,7 @@
             <div (click)="ListagemVeiculos()" class="card-menu">Listagem de Veiculos</div>
         </div>
 
-        <form class="form-page" [formGroup]="veiculoForm" (submit)="enviar()" >
-            <div class="row">
-                <div class="group-row">
-                    <label>Nome</label>
-                    <input type="text" name="name" id="name" placeholder="Nome" formControlName="name" required />
-                    <label class="error-input" *ngIf="veiculoForm.get('name')?.errors?.['required'] &&
-                    veiculoForm.get('name')?.touched">
-                        Campo Obrigatório!
-                    </label>
-                </div>
-            </div>
+        <form class="form-page" [formGroup]="veiculoForm" (submit)="enviar()" >            
 
             <div class="row">
                 <div class="group-row">
@@ -97,14 +87,7 @@
                         Campo Obrigatório!
                     </label>
                 </div>
-            </div>
-
-            <div class="row">
-                <div class="group-row">
-                    <label>Cliente</label>
-                    <ng-select class="select-padrao" formControlName="clienteSelect" [(ngModel)]="clienteSelect" [items]="listClientes" bindLabel="name" [multiple]="false" [clearable]="false" [searchable]="false"></ng-select>
-                </div>
-            </div>
+            </div>            
 
             <div class="row">
                 <div class="group-row">

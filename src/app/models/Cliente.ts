@@ -1,5 +1,4 @@
 import { Base } from "./Base";
-import { Franquia } from "./Franquia";
 
 export class Cliente extends Base
 {

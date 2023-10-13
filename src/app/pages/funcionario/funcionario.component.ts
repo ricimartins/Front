@@ -25,10 +25,7 @@ export class FuncionarioComponent {
     private router : Router, private route: ActivatedRoute, public dialog: MatDialog) {}
 
   
-  //#region Variáveis globais
-  //listFranquias = new Array<SelectModel>();
-  //franquiaSelect = new SelectModel();
-
+  //#region Variáveis globais  
   funcionarioForm : FormGroup;
   tipoTela: number = 1;// 1 listagem, 2 cadastro, 3 edição
   tableListFuncionarios: Array<Funcionario>;
@@ -67,7 +64,7 @@ export class FuncionarioComponent {
           email: ['', [Validators.required]],
           franquiaSelect:['', [Validators.required]],
           senha:['', [Validators.required]],
-          cpf:['', [Validators.required]]
+          //cpf:['', [Validators.required]]
         }
       )
       this.ListagemFuncionarios();        
@@ -150,7 +147,7 @@ export class FuncionarioComponent {
       let funcionario = new Funcionario();
       funcionario.Nome = dados["name"].value;
       funcionario.Id = 0;
-      funcionario.Telefone = dados["telefone"].value;
+      funcionario.Telefone = dados["telefone"].value;      
       funcionario.Email = dados["email"].value;      
       funcionario.NomePropriedade = '';
       funcionario.Mensagem = '';
@@ -210,7 +207,6 @@ export class FuncionarioComponent {
           .subscribe((response: Funcionario) => {                              
                 
             this.selectedItemsFranquia.forEach((currentValue, index) => {
-              //cadastra os veículos selecionados
               
               var franquiaFuncionario = new FranquiaFuncionario();
               franquiaFuncionario.Id = 0;
@@ -219,6 +215,7 @@ export class FuncionarioComponent {
               franquiaFuncionario.Mensagem = '';
               franquiaFuncionario.NomePropriedade = '';       
 
+              //Cadastra as franquias
               this.franquiaFuncionarioService.AdicionarFranquiaFuncionario(franquiaFuncionario)
               .subscribe((response: FranquiaFuncionario) => {                                
 
@@ -272,7 +269,6 @@ export class FuncionarioComponent {
     
       this.tipoTela = 2;
       this.ListarFranquia();
-      //let franquiaSelect = new SelectModel();        
   
       this.funcionarioService.ListarFuncionarioById(row.Id)
         .subscribe((response: Array<Funcionario>) => {
@@ -280,6 +276,8 @@ export class FuncionarioComponent {
           this.funcionarioForm.controls["name"].setValue(row.Nome);
           this.funcionarioForm.controls["telefone"].setValue(row.Telefone);
           this.funcionarioForm.controls["email"].setValue(row.Email);
+          
+          //Recupera as franquias do funcionario
           this.franquiaFuncionarioService.ObterFranquiaFuncionario(row.Id)
             .subscribe((response: Array<FranquiaFuncionario>) => {
               
@@ -289,11 +287,7 @@ export class FuncionarioComponent {
               });
 
             }, (error) => console.error(error),
-            () => { })
-
-          //franquiaSelect.id = row.Franquia.Id;
-          //franquiaSelect.name = row.Franquia.Nome;
-          //this.funcionarioForm.controls["franquiaSelect"].setValue(franquiaSelect);
+            () => { })          
                   
         }, (error) => console.error(error),
           () => { })              

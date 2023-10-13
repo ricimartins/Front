@@ -22,9 +22,7 @@ export class VeiculoComponent {
     public veiculoService: VeiculoService,private router : Router, 
     private route: ActivatedRoute) {}
 
-  //#region Variáveis globais
-  listClientes = new Array<SelectModel>();
-  clienteSelect = new SelectModel();
+  //#region Variáveis globais  
   veiculoForm : FormGroup;
   tipoTela: number = 1;// 1 listagem, 2 cadastro
   tableListVeiculos: Array<Veiculo>;
@@ -48,8 +46,7 @@ export class VeiculoComponent {
           modelo: ['', [Validators.required]],
           ano: ['', [Validators.required]],
           cor: ['', [Validators.required]],
-          chassi: ['', [Validators.required]],
-          clienteSelect:['', [Validators.required]]
+          chassi: ['', [Validators.required]]          
         }
       )
       this.ListagemVeiculos();        
@@ -145,8 +142,7 @@ export class VeiculoComponent {
   loadCadastro(row : any)
   {    
     this.tipoTela = 2;
-    this.ListarCliente();
-    let clienteSelect = new SelectModel();        
+    this.ListarCliente();    
 
     this.veiculoService.ListarVeiculoById(row.Id)
         .subscribe((response: Array<Veiculo>) => {
@@ -161,11 +157,7 @@ export class VeiculoComponent {
               modelo : row.Modelo,
               ano : row.Ano,
               cor: row.Cor,
-              chassi: row.Chassi,
-              clienteSelect : {
-                id : row.Cliente.Id,
-                name : row.Cliente.Nome
-              }              
+              chassi: row.Chassi              
             }
           );          
                   
@@ -237,7 +229,7 @@ export class VeiculoComponent {
     
         this.veiculoForm.reset();
         this.ListagemVeiculos()     
-        alert('Cadastro realizado com sucesso!');
+        alert('Cadastrado com sucesso!');
 
         }, (error) => console.error(error),
           () => { })
@@ -256,9 +248,7 @@ export class VeiculoComponent {
                 item.name = x.Nome;
                 
                 lisCliente.push(item);
-          });
-
-          this.listClientes = lisCliente;
+          });          
       }         
       )
     }

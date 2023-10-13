@@ -34,7 +34,7 @@
                 </div>
             </div>
 
-            <div class="row">
+            <!-- <div class="row">
                 <div class="group-row">
                     <label>CPF</label>
                     <input type="text" name="cpf" id="cpf" placeholder="CPF" formControlName="cpf" required />
@@ -43,7 +43,7 @@
                         Campo Obrigatório!
                     </label>
                 </div>
-            </div>
+            </div> -->
 
             <div class="row">
                 <div class="group-row">
@@ -69,8 +69,7 @@
 
             <div class="row">
                 <div class="group-row">
-                    <label>Franquia</label>
-                    <!-- <ng-select class="select-padrao" formControlName="franquiaSelect" [(ngModel)]="franquiaSelect" [items]="listFranquias" bindLabel="name" [multiple]="false" [clearable]="false" [searchable]="false"></ng-select> -->                    
+                    <label>Franquia</label>                    
                     <ng-multiselect-dropdown formControlName="franquiaSelect"
                         [placeholder]="'Selecione...'"
                         [settings]="dropdownSettingsFranquia"

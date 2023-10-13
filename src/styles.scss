@@ -60,14 +60,16 @@ label {
 {
   background: #ffffff;
   box-sizing: border-box;
-  width: 397px;
-  height: 44px;
+  min-width: 400px;
+  width: auto;  
+  min-height: 50px;
+  height: auto;
   //border: 1px solid #ccd4db;
   border-radius: 4px;
   padding: 8px;
   color: #6e778b;
 
-  font-size: 15px;
+  font-size: 14px;
   font-family: "Poppins";
   text-transform: uppercase;  
 }
