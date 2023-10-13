@@ -8,6 +8,10 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { NgSelectModule } from "@ng-select/ng-select";
 import { NgxPaginationModule } from "ngx-pagination";
 import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from "@angular/material/button";
+import { MatMenuModule } from "@angular/material/menu";
+import {MatTabsModule} from '@angular/material/tabs';
+import { NgMultiSelectDropDownModule } from "ng-multiselect-dropdown";
 
 @NgModule(
     {   
@@ -22,7 +26,11 @@ import { MatIconModule } from '@angular/material/icon';
             ReactiveFormsModule,
             NgSelectModule,
             NgxPaginationModule,
-            MatIconModule
+            MatIconModule,
+            MatButtonModule,
+            MatMenuModule,
+            MatTabsModule,    
+            NgMultiSelectDropDownModule.forRoot()
         ]
     }
 )

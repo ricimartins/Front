@@ -32,4 +32,20 @@ export class ClienteService
         return this.httpClient.get(`${this.baseUrl}/ListarCliente`);
     }
 
+    ListarClienteById(id : number)
+    {
+        return this.httpClient.get(`${this.baseUrl}/ListarClienteById?id=${id}`);
+    }
+
+    DeleteCliente(id:number)
+    {
+        return this.httpClient.delete(`${this.baseUrl}/DeleteCliente?Id=${id}`);
+    }
+
+    AtualizarCliente(cliente:Cliente)
+    {
+        return this.httpClient.put<Cliente> (`${this.baseUrl}/AtualizarCliente`,
+            cliente);
+    }
+
 }

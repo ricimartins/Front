@@ -11,6 +11,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from "@angular/material/button";
 import { MatMenuModule } from "@angular/material/menu";
 import { MatDialogModule } from "@angular/material/dialog";
+import { NgMultiSelectDropDownModule } from "ng-multiselect-dropdown";
 
 @NgModule(
     {   
@@ -28,8 +29,9 @@ import { MatDialogModule } from "@angular/material/dialog";
             MatIconModule,
             MatButtonModule,
             MatMenuModule,
-            MatIconModule,
-            MatDialogModule],        
+            MatDialogModule,
+            NgMultiSelectDropDownModule.forRoot()
+        ],        
     }
 )
 

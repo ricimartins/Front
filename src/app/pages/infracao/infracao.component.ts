@@ -8,8 +8,8 @@ import { MenuService } from 'src/app/services/menu.service';
 import { VeiculoService } from 'src/app/services/veiculo.service';
 import { Veiculo } from 'src/app/models/Veiculo';
 import { Multa } from 'src/app/models/Multa';
-import { CondutorService } from 'src/app/services/condutor.service';
 import { MultaService } from 'src/app/services/multa.service';
+import { ClienteService } from 'src/app/services/cliente.service';
 
 @Component({
   selector: 'infracao',
@@ -20,8 +20,7 @@ export class InfracaoComponent {
    
   constructor(public menuService: MenuService, public formBuilder: FormBuilder,
     public veiculoService: VeiculoService, public authService: AuthService,
-    public infracaoService: InfracaoService, public CondutorService: CondutorService,
-    public MultaService: MultaService) {}
+    public infracaoService: InfracaoService, public MultaService: MultaService, public ClienteService: ClienteService) {}
 
 listVeiculos = new Array<SelectModel>();
 veiculoSelect = new SelectModel();
@@ -29,8 +28,8 @@ veiculoSelect = new SelectModel();
 listMultas = new Array<SelectModel>();
 multaSelect = new SelectModel();
 
-listCondutores = new Array<SelectModel>();
-condutorSelect = new SelectModel();
+listClientes = new Array<SelectModel>();
+clienteSelect = new SelectModel();
 
   infracaoForm : FormGroup;
 
@@ -45,7 +44,7 @@ condutorSelect = new SelectModel();
           email: ['', [Validators.required]],
           veiculoSelect:['', [Validators.required]],
           multaSelect:['', [Validators.required]],
-          condutorSelect:['', [Validators.required]]
+          clienteSelect:['', [Validators.required]]
         }
       )
       this.ListagemInfracoes();        
@@ -87,7 +86,7 @@ condutorSelect = new SelectModel();
     this.tipoTela = 2;
     this.ListarVeiculo();
     this.ListarMultas();
-    this.ListarCondutores();
+    this.ListarClientes();
     this.infracaoForm.reset();
   }
 
@@ -125,11 +124,10 @@ condutorSelect = new SelectModel();
       var dados = this.dadosForm();      
 
       let item = new Infracao();
-      item.Nome = dados["name"].value;
       item.Id = 0;
       item.VeiculoId = parseInt(this.veiculoSelect.id);
       item.MultaId = parseInt(this.multaSelect.id);
-      item.CondutorId = parseInt(this.condutorSelect.id);
+      item.ClienteId = parseInt(this.clienteSelect.id);
       
       item.NomePropriedade = '';
       item.Mensagem = '';
@@ -152,8 +150,7 @@ condutorSelect = new SelectModel();
           var lisVeiculo = [];
           response.forEach(x => {
                 var item = new SelectModel();
-                item.id = x.Id.toString();
-                item.name = x.Nome;
+                item.id = x.Id.toString();                
                 
                 lisVeiculo.push(item);
           });
@@ -171,8 +168,7 @@ condutorSelect = new SelectModel();
           var lisMulta = [];
           response.forEach(x => {
                 var item = new SelectModel();
-                item.id = x.Id.toString();
-                item.name = x.Nome;
+                item.id = x.Id.toString();                
                 
                 lisMulta.push(item);
           });
@@ -182,21 +178,20 @@ condutorSelect = new SelectModel();
       )
     }
 
-    ListarCondutores(){
+    ListarClientes(){
       
-      this.CondutorService.ListarCondutor()
+      this.ClienteService.ListarCliente()
         .subscribe((response: Array<Multa>) => {
         
-          var lisCondutor = [];
+          var lisCliente = [];
           response.forEach(x => {
                 var item = new SelectModel();
-                item.id = x.Id.toString();
-                item.name = x.Nome;
+                item.id = x.Id.toString();                
                 
-                lisCondutor.push(item);
+                lisCliente.push(item);
           });
 
-          this.listCondutores = lisCondutor;
+          this.listClientes = lisCliente;
       }         
       )
     }

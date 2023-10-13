@@ -111,8 +111,7 @@ orgaoAutuadorSelect = new SelectModel();
       
       var dados = this.dadosForm();      
 
-      let item = new Multa();
-      item.Nome = dados["name"].value;
+      let item = new Multa();      
       item.Id = 0;
       item.Descricao = dados["descricao"].value
       item.OrgaoAutuadorId = parseInt(this.orgaoAutuadorSelect.id)

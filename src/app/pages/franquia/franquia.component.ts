@@ -89,8 +89,8 @@ export class FranquiaComponent {
   
 
   ListaFranquias() {
-    this.tipoTela = 1;
-    
+    this.tipoTela = 1;  
+    this.router.navigate(['/franquia']);  
     //this.franquiaService.ListaFranquiasUsuario(this.authService.getEmailUser())
     this.franquiaService.ListarFranquia() 
       .subscribe((response: Array<Franquia>) => {
@@ -98,8 +98,7 @@ export class FranquiaComponent {
         this.tableListFranquias = response;
 
       }, (error) => console.error(error),
-        () => { })
-
+        () => { })        
   }
 
     // Pega os dados do form 
@@ -135,9 +134,8 @@ export class FranquiaComponent {
         alert('Alterado com sucesso!');
 
         this.tipoTela = 1;
-        this.ListaFranquias();
-        this.router.navigate(['/franquia']);
-
+        this.ListaFranquias(); 
+           
       }, (error) => console.error(error),
         () => { })
     }
@@ -152,8 +150,8 @@ export class FranquiaComponent {
         () => { })
     }
     
-    this.franquiaForm.reset();    
-
+    this.franquiaForm.reset();        
+        
   }
 
   loadCadastro(row : any)
@@ -189,10 +187,7 @@ export class FranquiaComponent {
     this.franquiaService.DeleteFranquia(row.Id)
       .subscribe((response: Franquia) => {
         
-        this.ListaFranquias();
-        this.router.navigate(
-          ['/franquia']
-        );
+        this.ListaFranquias();        
         alert('Excluído com sucesso!');                      
 
       }, (error) => console.error(error),

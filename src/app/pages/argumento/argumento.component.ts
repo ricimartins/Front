@@ -45,7 +45,7 @@ export class ArgumentoComponent {
       this.configpag();
     }
 
-  tipoTela: number = 1;// 1 listagem, 2 cadastro, 3 edição
+  tipoTela: number = 1;// 1 listagem, 2 cadastro
   tableListArgumentos: Array<Argumento>;
   id: string;
   
@@ -151,8 +151,7 @@ export class ArgumentoComponent {
 
       var dados = this.dadosForm();      
 
-      let item = new Argumento();
-      item.Nome = dados["name"].value;
+      let item = new Argumento();      
       item.Id = 0;
       item.Descricao = dados["descricao"].value
       item.MultaId = parseInt(this.multaSelect.id)
@@ -197,9 +196,7 @@ export class ArgumentoComponent {
           var lisMulta = [];
           response.forEach(x => {
                 var item = new SelectModel();
-                item.id = x.Id.toString();
-                item.name = x.Nome;                
-                
+                item.id = x.Id.toString();                                          
                 lisMulta.push(item);
           });
 

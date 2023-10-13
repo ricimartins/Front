@@ -37,4 +37,15 @@ export class VeiculoService
         return this.httpClient.get(`${this.baseUrl}/ListarVeiculoById?id=${id}`);
     }
 
+    AtualizarVeiculo(veiculo:Veiculo)
+    {
+        return this.httpClient.put<Veiculo> (`${this.baseUrl}/AtualizarVeiculo`,
+            veiculo);
+    }
+
+    DeleteVeiculo(id:number)
+    {
+        return this.httpClient.delete(`${this.baseUrl}/DeleteVeiculo?Id=${id}`);
+    }
+
 }

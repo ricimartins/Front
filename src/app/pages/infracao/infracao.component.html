@@ -50,8 +50,8 @@
 
             <div class="row">
                 <div class="group-row">
-                    <label>Condutor</label>
-                    <ng-select class="select-padrao" formControlName="condutorSelect" [(ngModel)]="condutorSelect" [items]="listCondutores" bindLabel="name" [multiple]="false" [clearable]="false" [searchable]="false"></ng-select>
+                    <label>Cliente</label>
+                    <ng-select class="select-padrao" formControlName="clienteSelect" [(ngModel)]="clienteSelect" [items]="listClientes" bindLabel="name" [multiple]="false" [clearable]="false" [searchable]="false"></ng-select>
                 </div>
             </div>
 
@@ -81,10 +81,8 @@
                     <tr>
                         <!-- <td></td> -->
                         <td>Código</td>
-                        <td>Nome</td>
-                        <td>Veiculo</td>
-                        <td>Multa</td>
-                        <td>Condutor</td>
+                        <td>Placa</td>
+                        <td>Cliente</td>                        
                         <td>Ação</td>
 
                     </tr>
@@ -93,12 +91,9 @@
                     <tr class="select-item" *ngFor="let item of tableListInfracoes | paginate: config; let i = index"
                         class="linha-table" [ngClass]="{'linha-cinza' : i % 2 == 0, 'linha-branca' : i % 2 !== 0}">
 
-                        <td>{{item.Id}}</td>
-                        <td>{{item.Nome}}</td>
-                        <td>{{item.Veiculo.Nome}}</td>
-                        <td>{{item.Multa.Nome}}</td>
-                        <td>{{item.Condutor.Nome}}</td>
-                        
+                        <td>{{item.Id}}</td>                        
+                        <td>{{item.Veiculo.Placa}}</td>                        
+                        <td>{{item.Cliente.Nome}}</td>                        
                         <td> Edit</td>
 
                     </tr>

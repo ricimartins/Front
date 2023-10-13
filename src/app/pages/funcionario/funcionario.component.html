@@ -36,6 +36,17 @@
 
             <div class="row">
                 <div class="group-row">
+                    <label>CPF</label>
+                    <input type="text" name="cpf" id="cpf" placeholder="CPF" formControlName="cpf" required />
+                    <label class="error-input" *ngIf="funcionarioForm.get('cpf')?.errors?.['required'] &&
+                    funcionarioForm.get('cpf')?.touched">
+                        Campo Obrigatório!
+                    </label>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="group-row">
                     <label>E-mail</label>
                     <input type="text" name="email" id="email" placeholder="E-mail" formControlName="email" required />
                     <label class="error-input" *ngIf="funcionarioForm.get('email')?.errors?.['required'] &&
@@ -47,8 +58,30 @@
 
             <div class="row">
                 <div class="group-row">
+                    <label>Senha</label>
+                    <input type="password" name="seha" id="senha" placeholder="Senha" formControlName="senha" required />
+                    <label class="error-input" *ngIf="funcionarioForm.get('email')?.errors?.['required'] &&
+                    funcionarioForm.get('senha')?.touched">
+                        Campo Obrigatório!
+                    </label>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="group-row">
                     <label>Franquia</label>
-                    <ng-select class="select-padrao" formControlName="franquiaSelect" [(ngModel)]="franquiaSelect" [items]="listFranquias" bindLabel="name" [multiple]="false" [clearable]="false" [searchable]="false"></ng-select>
+                    <!-- <ng-select class="select-padrao" formControlName="franquiaSelect" [(ngModel)]="franquiaSelect" [items]="listFranquias" bindLabel="name" [multiple]="false" [clearable]="false" [searchable]="false"></ng-select> -->                    
+                    <ng-multiselect-dropdown formControlName="franquiaSelect"
+                        [placeholder]="'Selecione...'"
+                        [settings]="dropdownSettingsFranquia"
+                        [data]="dropdownListFranquia"
+                        [(ngModel)]="selectedItemsFranquia"
+                        (onSelect)="onItemSelect($event)"
+                        (onSelectAll)="onSelectAll($event)"
+                        (onDeSelect)="onDeSelect($event)"
+                        (onDeSelectAll)="onDeSelectAll($event)"
+                        class="dropdown-btn">
+                        </ng-multiselect-dropdown>                    
                 </div>
             </div>
 
@@ -80,8 +113,7 @@
                         <td>Código</td>
                         <td>Nome</td>
                         <td>E-mail</td>
-                        <td>Telefone</td>
-                        <td>Franquia</td>
+                        <td>Telefone</td>                        
                         <td>Ação</td>
 
                     </tr>
@@ -93,11 +125,10 @@
                         <td>{{item.Id}}</td>
                         <td>{{item.Nome}}</td>
                         <td>{{item.Email}}</td>
-                        <td>{{item.Telefone}}</td>
-                        <td>{{item.Franquia.Nome}}</td>
+                        <td>{{item.Telefone}}</td>                        
 
                         <td>
-                            <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+                            <button mat-icon-button [matMenuTriggerFor]="menu">
                                 <mat-icon>menu</mat-icon>
                               </button>
                               <mat-menu #menu="matMenu">
@@ -105,7 +136,7 @@
                                   <mat-icon>edit</mat-icon>
                                   <span>Alterar</span>
                                 </button>
-                                <button mat-menu-item (click)="openDialog('0ms', '0ms')"disabled>
+                                <button mat-menu-item (click)="OnclickDelete(item)">
                                   <mat-icon>delete</mat-icon>
                                   <span>Excluir</span>
                                 </button>                                

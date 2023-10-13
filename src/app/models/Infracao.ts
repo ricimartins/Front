@@ -1,5 +1,5 @@
 import { Base } from "./Base";
-import { Condutor } from "./Condutor";
+import { Cliente } from "./Cliente";
 import { Multa } from "./Multa";
 import { Veiculo } from "./Veiculo";
 
@@ -9,8 +9,10 @@ export class Infracao extends Base
     Pontuacao: number;
     VeiculoId: number;
     MultaId: number;
-    CondutorId: number;
+    ClienteId: number;
+    
     Veiculo: Veiculo;
     Multa: Multa;
-    Condutor: Condutor;    
+    Cliente: Cliente;
+        
 }

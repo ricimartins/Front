@@ -9,6 +9,7 @@ import { NgSelectModule } from "@ng-select/ng-select";
 import { NgxPaginationModule } from "ngx-pagination";
 import { MatIconModule } from '@angular/material/icon';
 import {MatTabsModule} from '@angular/material/tabs';
+import { MatMenuModule } from "@angular/material/menu";
 
 @NgModule(
     {   
@@ -24,7 +25,8 @@ import {MatTabsModule} from '@angular/material/tabs';
             NgSelectModule,
             NgxPaginationModule,
             MatIconModule,
-            MatTabsModule
+            MatTabsModule,
+            MatMenuModule
         ]
     }
 )

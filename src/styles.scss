@@ -56,6 +56,22 @@ label {
   width: auto;
 }
 
+.dropdown-btn
+{
+  background: #ffffff;
+  box-sizing: border-box;
+  width: 397px;
+  height: 44px;
+  //border: 1px solid #ccd4db;
+  border-radius: 4px;
+  padding: 8px;
+  color: #6e778b;
+
+  font-size: 15px;
+  font-family: "Poppins";
+  text-transform: uppercase;  
+}
+
 .container-base {
   padding: 88px 16px 0px 168px;
 
@@ -96,7 +112,7 @@ label {
 
     .form-page {
       display: grid;
-      grid-template-columns: auto auto auto;
+      grid-template-columns: auto;
       justify-content: center;            
 
       .row {
@@ -115,17 +131,17 @@ label {
 }
 
 .select-padrao {
-  background: #fefefe;
+  background: #ffffff;
   box-sizing: border-box;
-  border-radius: 3px;
+  width: 397px;
+  height: 44px;
+  border: 1px solid #ccd4db;
+  border-radius: 4px;
+  padding: 8px;
+  color: #6e778b;
+  font-size: 15px;
   font-family: "Poppins";
-  font-style: normal;
-  font-weight: 400;
-  font-size: 12px;
-  line-height: 160%;
-  color: #1e1e1e;
-  width: 385px;
-  height: 42px;
+  text-transform: uppercase;  
 }
 
 ::ng-deep .ng-select.ng-select-single .ng-select-container {

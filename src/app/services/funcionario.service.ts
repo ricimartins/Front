@@ -22,6 +22,12 @@ export class FuncionarioService
             funcionario);
     }
 
+    AtualizarFuncionario(funcionario:Funcionario)
+    {
+        return this.httpClient.put<Funcionario> (`${this.baseUrl}/AtualizarFuncionario`,
+            funcionario);
+    }
+
     ListarFuncionarioEmail(email:string)
     {
         return this.httpClient.get(`${this.baseUrl}/ListarFuncionarioEmail?email=${email}`);
@@ -31,5 +37,15 @@ export class FuncionarioService
     {
         return this.httpClient.get(`${this.baseUrl}/ListarFuncionario`);
     }
+
+    ListarFuncionarioById(id : number)
+    {
+        return this.httpClient.get(`${this.baseUrl}/ListarFuncionarioById?id=${id}`);
+    }
+
+    DeleteFuncionario(id:number)
+    {
+        return this.httpClient.delete(`${this.baseUrl}/DeleteFuncionario?Id=${id}`);
+    }    
 
 }

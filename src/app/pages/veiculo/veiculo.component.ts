@@ -22,10 +22,19 @@ export class VeiculoComponent {
     public veiculoService: VeiculoService,private router : Router, 
     private route: ActivatedRoute) {}
 
-listClientes = new Array<SelectModel>();
-clienteSelect = new SelectModel();
-
+  //#region Variáveis globais
+  listClientes = new Array<SelectModel>();
+  clienteSelect = new SelectModel();
   veiculoForm : FormGroup;
+  tipoTela: number = 1;// 1 listagem, 2 cadastro
+  tableListVeiculos: Array<Veiculo>;
+  id: string;  
+  rowId: number = 0; // Id selecionado para edição  
+  page: number = 1;
+  config: any;
+  paginacao: boolean = true;
+  itemsPorPagina: number = 10
+  //#endregion
 
   ngOnInit(){    
     this.menuService.menuSelecionado = 5;
@@ -48,16 +57,7 @@ clienteSelect = new SelectModel();
       this.configpag();
     }
 
-  tipoTela: number = 0;// 1 listagem, 2 cadastro, 3 edição
-  tableListVeiculos: Array<Veiculo>;
-  id: string;
-  // Id selecionado para edição  
-  rowId: number = 0;
-
-  page: number = 1;
-  config: any;
-  paginacao: boolean = true;
-  itemsPorPagina: number = 10
+  
 
   configpag() {
     this.id = this.gerarIdParaConfigDePaginacao();
@@ -82,7 +82,7 @@ clienteSelect = new SelectModel();
 
   cadastro()
   {
-    this.tipoTela = 1;
+    this.tipoTela = 2;
     this.ListarCliente();
     this.veiculoForm.reset();
   }
@@ -123,9 +123,8 @@ clienteSelect = new SelectModel();
   }
 
   OnclickEdit(row){      
-      
     this.loadCadastro(row);
-    this.tipoTela = 1;      
+    this.tipoTela = 2;      
     
     this.router.navigate(
       ['/veiculo'],
@@ -134,44 +133,52 @@ clienteSelect = new SelectModel();
   }
 
   OnclickDelete(row){      
-      
-      
-    // this.veiculoService.Delete(row.Id)
-    //   .subscribe((response: Argumento) => {
-        
-    //     this.ListagemArgumentos();
-    //     this.router.navigate(
-    //       ['/argumento']
-    //     );                      
-
-    //   }, (error) => console.error(error),
-    //     () => { })
+    this.veiculoService.DeleteVeiculo(row.Id)
+      .subscribe((response: Veiculo) => {
+        alert('Excluído com sucesso!')
+        this.ListagemVeiculos();                              
+      }, (error) => console.error(error),
+        () => { })
   }
   
   //Carrega dados do cadastro
   loadCadastro(row : any)
   {    
-    this.tipoTela = 1;
+    this.tipoTela = 2;
     this.ListarCliente();
     let clienteSelect = new SelectModel();        
 
-    this.rowId = row.Id;
-    this.veiculoForm.controls["name"].setValue(row.Nome);
-    this.veiculoForm.controls["placa"].setValue(row.Placa);
-    this.veiculoForm.controls["renavam"].setValue(row.Renavam);
-    this.veiculoForm.controls["marca"].setValue(row.Marca);
-    this.veiculoForm.controls["modelo"].setValue(row.Modelo);
-    this.veiculoForm.controls["ano"].setValue(row.Ano);
-    this.veiculoForm.controls["cor"].setValue(row.Cor);
-    this.veiculoForm.controls["chassi"].setValue(row.Chassi);
-
-    clienteSelect.id = row.Cliente.Id;
-    clienteSelect.name = row.Cliente.Nome;
-    this.veiculoForm.controls["clienteSelect"].setValue(clienteSelect);    
+    this.veiculoService.ListarVeiculoById(row.Id)
+        .subscribe((response: Array<Veiculo>) => {
+          this.rowId = row.Id;                              
+          
+          this.veiculoForm.patchValue(
+            {
+              name : row.Nome,
+              placa : row.Placa,
+              renavam : row.Renavam,
+              marca : row.Marca,
+              modelo : row.Modelo,
+              ano : row.Ano,
+              cor: row.Cor,
+              chassi: row.Chassi,
+              clienteSelect : {
+                id : row.Cliente.Id,
+                name : row.Cliente.Nome
+              }              
+            }
+          );          
+                  
+        }, (error) => console.error(error),
+          () => { })        
   }
   
   ListagemVeiculos() {
-    this.tipoTela = 0;
+    this.tipoTela = 1;
+    this.veiculoForm.reset();
+    this.router.navigate(
+      ['/veiculo']
+    ); 
     
     this.veiculoService.ListarVeiculo()
       .subscribe((response: Array<Veiculo>) => {
@@ -189,11 +196,16 @@ clienteSelect = new SelectModel();
     }
 
     enviar(){
+      let action;
       
+      this.route.queryParamMap
+       .subscribe(params => {
+             action = params.get('action');     
+      });
+
       var dados = this.dadosForm();      
 
-      let item = new Veiculo();
-      item.Nome = dados["name"].value;
+      let item = new Veiculo();      
       item.Id = 0;
       item.Placa = dados["placa"].value;
       item.Renavam = dados["renavam"].value;
@@ -201,25 +213,38 @@ clienteSelect = new SelectModel();
       item.Modelo = dados["modelo"].value;
       item.Ano = dados["ano"].value;
       item.Cor = dados["cor"].value;
-      item.Chassi = dados["chassi"].value;
-      item.ClienteId = parseInt(this.clienteSelect.id);
+      item.Chassi = dados["chassi"].value;      
 
       item.NomePropriedade = '';
       item.Mensagem = '';
 
-      this.veiculoService.AdicionarVeiculo(item)
+      if (action === 'edit'){
+        //Recupero o Id do registro que estão em edição
+        item.Id = this.rowId;
+        this.veiculoService.AtualizarVeiculo(item)
         .subscribe((response: Veiculo) => {
-  
-      this.veiculoForm.reset();
-      this.ListagemVeiculos()     
-      alert('Cadastro realizado com sucesso!');
+          
+          alert('Alterado com sucesso!')
+          this.ListagemVeiculos();          
 
-      }, (error) => console.error(error),
-        () => { })
+        }, (error) => console.error(error),
+          () => { })
+      }
+      else{
 
-      }  
+        this.veiculoService.AdicionarVeiculo(item)
+          .subscribe((response: Veiculo) => {
+    
+        this.veiculoForm.reset();
+        this.ListagemVeiculos()     
+        alert('Cadastro realizado com sucesso!');
 
-      ListarCliente(){
+        }, (error) => console.error(error),
+          () => { })
+      }
+    }  
+
+    ListarCliente(){
       
       this.clienteService.ListarCliente()
         .subscribe((response: Array<Cliente>) => {

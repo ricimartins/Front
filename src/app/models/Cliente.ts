@@ -3,12 +3,12 @@ import { Franquia } from "./Franquia";
 
 export class Cliente extends Base
 {
-    Documento: string;
-    TipoDocumento: string;
+    Nome: string;
+    CPF: string;
     Telefone: string;
     Email: string;
     Endereco: string;
-    DataNascimento: string;
-    FranquiaId: number;
-    Franquia : Franquia;    
+    DataNascimento: Date;    
+    NumeroCNH: string;
+    ValidadeCNH: Date;
 }

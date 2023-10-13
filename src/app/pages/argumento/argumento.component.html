@@ -71,8 +71,7 @@
                 <thead>
                     <tr>
                         <!-- <td></td> -->
-                        <td>Código</td>
-                        <td>Nome</td>
+                        <td>Código</td>                        
                         <td>Descrição</td>
                         <td>Multa</td>
                         <td>Anexo</td>
@@ -85,10 +84,9 @@
                     <tr class="select-item" *ngFor="let item of tableListArgumentos | paginate: config; let i = index"
                         class="linha-table" [ngClass]="{'linha-cinza' : i % 2 == 0, 'linha-branca' : i % 2 !== 0}" >
 
-                        <td>{{item.Id}}</td>
-                        <td>{{item.Nome}}</td>
+                        <td>{{item.Id}}</td>                        
                         <td>{{item.Descricao}}</td>
-                        <td>{{item.Multa.Nome}}</td>
+                        <td>{{item.Multa.Codigo}}</td>
                         <td>Baixar</td>
                         <td (click)="OnclickEdit(item)">Editar</td>
                         <td (click)="OnclickDelete(item)">Excluir</td>

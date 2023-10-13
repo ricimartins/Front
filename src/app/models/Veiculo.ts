@@ -1,5 +1,4 @@
 import { Base } from "./Base";
-import { Cliente } from "./Cliente";
 
 export class Veiculo extends Base
 {
@@ -9,7 +8,5 @@ export class Veiculo extends Base
     Modelo: string;
     Ano: number;
     Cor: string;
-    Chassi: string;
-    ClienteId: number;
-    Cliente: Cliente;
+    Chassi: string;    
 }

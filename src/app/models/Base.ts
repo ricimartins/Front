@@ -1,6 +1,5 @@
 export class Base {
-    Id: number;
-    Nome: string;
+    Id: number;    
     NomePropriedade: string;
     Mensagem: string;
     Notificaoes:[];

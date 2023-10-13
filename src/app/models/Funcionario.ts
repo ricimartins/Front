@@ -1,9 +1,8 @@
 import { Base } from "./Base";
-import { Franquia } from "./Franquia";
 
 export class Funcionario extends Base{
+    Nome: string;
     Telefone: string;
     Email: string;
-    FranquiaId: number;
-    Franquia: Franquia;
+    ApplicationUserId: number;
 }

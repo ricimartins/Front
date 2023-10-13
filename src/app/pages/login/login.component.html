@@ -21,7 +21,7 @@
                     <div class="text-info">
                         Senha                        
                     </div>
-                    <input class="input-form" type="text" name="senha" id="senha" placeholder="Senha" formControlName="senha" required="">
+                    <input class="input-form" type="password" name="senha" id="senha" placeholder="Senha" formControlName="senha" required="">
                     <label *ngIf="loginForm.get('senha')?.errors?.['required'] &&  loginForm.get('senha')?.touched" class="error-input">
                         Campo Obrigatório!
                     </label>                                        
