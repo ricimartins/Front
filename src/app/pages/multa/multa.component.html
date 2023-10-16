@@ -7,15 +7,16 @@
                 Cadastro de Multas
             </div>
             <div (click)="ListagemMultas()" class="card-menu">Listagem de Multas</div>
-        </div>         
-    
-        <form class="form-page" [formGroup]="multaForm" (submit)="enviar()" >
+        </div>
+
+        <form class="form-page" [formGroup]="multaForm" (submit)="enviar()">
             <div class="row">
                 <div class="group-row">
-                    <label>Nome</label>
-                    <input type="text" name="name" id="name" placeholder="Nome" formControlName="name" required />
-                    <label class="error-input" *ngIf="multaForm.get('name')?.errors?.['required'] &&
-                    multaForm.get('name')?.touched">
+                    <label>Código</label>
+                    <input type="text" name="codigo" id="codigo" placeholder="Código" formControlName="codigo"
+                        required />
+                    <label class="error-input" *ngIf="multaForm.get('codigo')?.errors?.['required'] &&
+                    multaForm.get('codigo')?.touched">
                         Campo Obrigatório!
                     </label>
                 </div>
@@ -24,18 +25,30 @@
             <div class="row">
                 <div class="group-row">
                     <label>Descrição</label>
-                    <input type="text" name="descricao" id="descricao" placeholder="Descrição" formControlName="descricao" required />
+                    <input type="text" name="descricao" id="descricao" placeholder="Descrição"
+                        formControlName="descricao" required />
                     <label class="error-input" *ngIf="multaForm.get('descricao')?.errors?.['required'] &&
                     multaForm.get('descricao')?.touched">
                         Campo Obrigatório!
                     </label>
                 </div>
-            </div>            
+            </div>
 
             <div class="row">
                 <div class="group-row">
                     <label>Orgão Autuador</label>
-                    <ng-select class="select-padrao" formControlName="orgaoAutuadorSelect" [(ngModel)]="orgaoAutuadorSelect" [items]="listOrgaosAutuadores" bindLabel="name" [multiple]="false" [clearable]="false" [searchable]="false"></ng-select>
+                    <ng-multiselect-dropdown [placeholder]="'Selecione...'" formControlName="OrgaoAutuadorSelect"
+                        [settings]="dropdownSettingsOrgaoAutuador"
+                        [data]="dropdownListOrgaoAutuador"
+                        [(ngModel)]="selectedOrgaoAutuador"
+                        (onSelect)="onItemSelectOrgaoAutuador($event)"
+                        (onDeSelect)="onDeSelectOrgaoAutuador($event)"
+                        class="dropdown-btn">
+                    </ng-multiselect-dropdown>
+                    <label class="error-input" *ngIf="multaForm.get('OrgaoAutuadorSelect')?.errors?.['required'] &&
+                    multaForm.get('OrgaoAutuadorSelect')?.touched">
+                        Campo Obrigatório!
+                    </label>
                 </div>
             </div>
 
@@ -64,9 +77,9 @@
                 <thead>
                     <tr>
                         <!-- <td></td> -->
-                        <td>Código</td>                        
+                        <td>Código</td>
                         <td>Descrição</td>
-                        <td>Orgão Autuador</td>                        
+                        <td>Orgão Autuador</td>
                         <td>Ação</td>
 
                     </tr>
@@ -75,10 +88,24 @@
                     <tr class="select-item" *ngFor="let item of tableListMultas | paginate: config; let i = index"
                         class="linha-table" [ngClass]="{'linha-cinza' : i % 2 == 0, 'linha-branca' : i % 2 !== 0}">
 
-                        <td>{{item.Id}}</td>                        
+                        <td>{{item.Codigo}}</td>
                         <td>{{item.Descricao}}</td>
                         <td>{{item.OrgaoAutuador.Nome}}</td>
-                        <td>Edit</td>
+                        <td>
+                            <button mat-icon-button [matMenuTriggerFor]="menu">
+                                <mat-icon>menu</mat-icon>
+                            </button>
+                            <mat-menu #menu="matMenu">
+                                <button mat-menu-item (click)="OnclickEdit(item)">
+                                    <mat-icon>edit</mat-icon>
+                                    <span>Alterar</span>
+                                </button>
+                                <button mat-menu-item (click)="OnclickDelete(item)">
+                                    <mat-icon>delete</mat-icon>
+                                    <span>Excluir</span>
+                                </button>
+                            </mat-menu>
+                        </td>
                     </tr>
                 </tbody>
             </table>

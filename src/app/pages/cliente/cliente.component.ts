@@ -78,6 +78,7 @@ export class ClienteComponent implements OnInit {
     this.configpag();
   }
 
+  //#region Paginação
   configpag() {
     this.id = this.gerarIdParaConfigDePaginacao();
 
@@ -109,6 +110,7 @@ export class ClienteComponent implements OnInit {
     this.page = event;
     this.config.currentPage = this.page;
   }
+  //#endregion
 
   cadastro() {
     this.tipoTela = 2;
@@ -155,11 +157,11 @@ export class ClienteComponent implements OnInit {
     cliente.Id = 0;
     cliente.Telefone = dados["telefone"].value;
     cliente.Email = dados["email"].value;
-    cliente.DataNascimento = dados["dataNascimento"].value;
+    cliente.DataNascimento = dados["dataNascimento"].value.toLocaleString().substring(0, 10);
     cliente.CPF = dados["cpf"].value == "" ? null : dados["cpf"].value;
     cliente.Endereco = dados["endereco"].value;
     cliente.NumeroCNH = dados["numeroCNH"].value;
-    cliente.ValidadeCNH = dados["validadeCNH"].value;
+    cliente.ValidadeCNH = dados["validadeCNH"].value.toLocaleString().substring(0, 10);
 
     cliente.NomePropriedade = '';
     cliente.Mensagem = '';
@@ -170,13 +172,11 @@ export class ClienteComponent implements OnInit {
       this.clienteService.AtualizarCliente(cliente)
         .subscribe((response: Cliente) => {
 
-
-
           // Busco as veiculos do cliente para cadastrar novamente
           this.veiculoClienteService.ObterVeiculoCliente(cliente.Id)
             .subscribe((response: Array<VeiculoCliente>) => {
 
-              //Remove todas as franquias atuais
+              //Remove os veiculos atuais
               response.forEach((currentValue, index) => {
                 this.veiculoClienteService.DeleteVeiculoCliente(currentValue.Id)
                   .subscribe((response: Array<VeiculoCliente>) => {
@@ -213,9 +213,9 @@ export class ClienteComponent implements OnInit {
         .subscribe((response: Cliente) => {
 
           //verifica se existe veículo selecionado
-          if (this.tableListVeiculos.length > 0) {
+          if (this.selectedVeiculos.length > 0) {
 
-            this.tableListVeiculos.forEach((currentValue, index) => {
+            this.selectedVeiculos.forEach((currentValue, index) => {
 
               var veiculoCliente = new VeiculoCliente();
               veiculoCliente.Id = 0;
@@ -261,6 +261,7 @@ export class ClienteComponent implements OnInit {
       }, (error) => console.error(error),
         () => { })
   }
+  //#endregion    
 
   loadCadastro(row: any) {
 
@@ -277,9 +278,9 @@ export class ClienteComponent implements OnInit {
             telefone: row.Telefone,
             email: row.Email,
             endereco: row.Endereco,
-            dataNascimento: row.DataNascimento,
+            dataNascimento: row.DataNascimento.toLocaleString().substring(0, 10),
             numeroCNH: row.NumeroCNH,
-            validadeCNH: row.validadeCNH
+            validadeCNH: row.ValidadeCNH.toLocaleString().substring(0, 10)
           }
         );
 
@@ -298,7 +299,7 @@ export class ClienteComponent implements OnInit {
       }, (error) => console.error(error),
         () => { })
   }
-  //#endregion      
+
 
   //#region Métodos dropdown
   onItemSelect(item: any) {

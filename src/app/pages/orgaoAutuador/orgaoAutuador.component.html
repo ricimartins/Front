@@ -79,7 +79,21 @@
                         <td>{{item.Id}}</td>
                         <td>{{item.Nome}}</td>
                         <td>{{item.UF}}</td>    
-                        <td> Edit</td>
+                        <td>
+                            <button mat-icon-button [matMenuTriggerFor]="menu">
+                                <mat-icon>menu</mat-icon>
+                            </button>
+                            <mat-menu #menu="matMenu">
+                                <button mat-menu-item (click)="OnclickEdit(item)">
+                                    <mat-icon>edit</mat-icon>
+                                    <span>Alterar</span>
+                                </button>
+                                <button mat-menu-item (click)="OnclickDelete(item)">
+                                    <mat-icon>delete</mat-icon>
+                                    <span>Excluir</span>
+                                </button>
+                            </mat-menu>
+                        </td>
 
                     </tr>
                 </tbody>

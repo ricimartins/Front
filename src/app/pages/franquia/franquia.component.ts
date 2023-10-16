@@ -90,8 +90,7 @@ export class FranquiaComponent {
 
   ListaFranquias() {
     this.tipoTela = 1;  
-    this.router.navigate(['/franquia']);  
-    //this.franquiaService.ListaFranquiasUsuario(this.authService.getEmailUser())
+    this.router.navigate(['/franquia']);      
     this.franquiaService.ListarFranquia() 
       .subscribe((response: Array<Franquia>) => {
 

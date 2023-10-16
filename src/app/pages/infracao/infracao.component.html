@@ -2,56 +2,60 @@
 <sidebar></sidebar>
 
 <div *ngIf="tipoTela == 2" class="container-base">
-    
+
     <div class="content-page">
         <div class="card-header">
             <div class="card-title">
                 Cadastro de Infracões
             </div>
             <div (click)="ListagemInfracoes()" class="card-menu">Listagem de Infracões</div>
-        </div>         
-    
-        <form class="form-page" [formGroup]="infracaoForm" (submit)="enviar()" >
-            <div class="row">
-                <div class="group-row">
-                    <label>Nome</label>
-                    <input type="text" name="name" id="name" placeholder="Nome" formControlName="name" required />
-                    <label class="error-input" *ngIf="infracaoForm.get('name')?.errors?.['required'] &&
-                    infracaoForm.get('name')?.touched">
-                        Campo Obrigatório!
-                    </label>
-                </div>
-            </div>
+        </div>
+
+        <form class="form-page" [formGroup]="infracaoForm" (submit)="enviar()">
 
             <div class="row">
                 <div class="group-row">
-                    <label>Pontuação</label>
-                    <input type="text" name="pontuacao" id="pontuacao" placeholder="Pontuação" formControlName="pontuacao" required />
-                    <label class="error-input" *ngIf="infracaoForm.get('pontuacao')?.errors?.['required'] &&
-                    infracaoForm.get('pontuacao')?.touched">
-                        Campo Obrigatório!
-                    </label>
+                    <label>Cliente</label>
+                    <ng-multiselect-dropdown [placeholder]="'Selecione...'" formControlName="clienteSelect"
+                        [settings]="dropdownSettingsCliente" [data]="dropdownListCliente" [(ngModel)]="selectedCliente"
+                        (onSelect)="onItemSelectCliente($event)" (onDeSelect)="onDeSelectCliente($event)"
+                        class="dropdown-btn">
+                    </ng-multiselect-dropdown>
                 </div>
             </div>
 
             <div class="row">
                 <div class="group-row">
                     <label>Veiculo</label>
-                    <ng-select class="select-padrao" formControlName="veiculoSelect" [(ngModel)]="veiculoSelect" [items]="listVeiculos" bindLabel="name" [multiple]="false" [clearable]="false" [searchable]="false"></ng-select>
+                    <ng-multiselect-dropdown [placeholder]="'Selecione...'" formControlName="veiculoSelect"
+                        [disabled]="selectedCliente.length == 0" [settings]="dropdownSettingsVeiculo"
+                        [data]="dropdownListVeiculo" [(ngModel)]="selectedVeiculo"
+                        (onSelect)="onItemSelectVeiculo($event)" (onDeSelect)="onDeSelectVeiculo($event)"
+                        class="dropdown-btn">
+                    </ng-multiselect-dropdown>
                 </div>
             </div>
 
             <div class="row">
                 <div class="group-row">
                     <label>Multa</label>
-                    <ng-select class="select-padrao" formControlName="multaSelect" [(ngModel)]="multaSelect" [items]="listMultas" bindLabel="name" [multiple]="false" [clearable]="false" [searchable]="false"></ng-select>
+                    <ng-multiselect-dropdown [placeholder]="'Selecione...'" formControlName="multaSelect"
+                        [disabled]="selectedVeiculo.length == 0" [settings]="dropdownSettingsMulta"
+                        [data]="dropdownListMulta" [(ngModel)]="selectedMulta" (onSelect)="onItemSelectMulta($event)"
+                        (onDeSelect)="onDeSelectMulta($event)" class="dropdown-btn">
+                    </ng-multiselect-dropdown>
                 </div>
             </div>
 
             <div class="row">
                 <div class="group-row">
-                    <label>Cliente</label>
-                    <ng-select class="select-padrao" formControlName="clienteSelect" [(ngModel)]="clienteSelect" [items]="listClientes" bindLabel="name" [multiple]="false" [clearable]="false" [searchable]="false"></ng-select>
+                    <label>Pontuação</label>
+                    <input type="text" name="pontuacao" id="pontuacao" placeholder="Pontuação"
+                        formControlName="pontuacao" required />
+                    <label class="error-input" *ngIf="infracaoForm.get('pontuacao')?.errors?.['required'] &&
+                    infracaoForm.get('pontuacao')?.touched">
+                        Campo Obrigatório!
+                    </label>
                 </div>
             </div>
 
@@ -74,27 +78,40 @@
                 <div class="card-title">Listagem de Infracoes</div>
                 <div (click)="cadastro()" class="card-menu">Cadastro de Infracoes</div>
             </div>
-
-
             <table cellspacing="0" cellpadding="0">
                 <thead>
                     <tr>
                         <!-- <td></td> -->
                         <td>Código</td>
                         <td>Placa</td>
-                        <td>Cliente</td>                        
+                        <td>Cliente</td>
+                        <td>Multa</td>
                         <td>Ação</td>
-
                     </tr>
                 </thead>
                 <tbody>
                     <tr class="select-item" *ngFor="let item of tableListInfracoes | paginate: config; let i = index"
                         class="linha-table" [ngClass]="{'linha-cinza' : i % 2 == 0, 'linha-branca' : i % 2 !== 0}">
 
-                        <td>{{item.Id}}</td>                        
-                        <td>{{item.Veiculo.Placa}}</td>                        
-                        <td>{{item.Cliente.Nome}}</td>                        
-                        <td> Edit</td>
+                        <td>{{item.Id}}</td>
+                        <td>{{item.Veiculo.Placa}}</td>
+                        <td>{{item.Cliente.Nome}}</td>
+                        <td>{{item.Multa.Descricao}}</td>
+                        <td>
+                            <button mat-icon-button [matMenuTriggerFor]="menu">
+                                <mat-icon>menu</mat-icon>
+                            </button>
+                            <mat-menu #menu="matMenu">
+                                <button mat-menu-item (click)="OnclickEdit(item)">
+                                    <mat-icon>edit</mat-icon>
+                                    <span>Alterar</span>
+                                </button>
+                                <button mat-menu-item (click)="OnclickDelete(item)">
+                                    <mat-icon>delete</mat-icon>
+                                    <span>Excluir</span>
+                                </button>
+                            </mat-menu>
+                        </td>
 
                     </tr>
                 </tbody>

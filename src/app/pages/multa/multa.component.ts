@@ -7,6 +7,7 @@ import { MultaService } from 'src/app/services/multa.service';
 import { MenuService } from 'src/app/services/menu.service';
 import { OrgaoAutuadorService } from 'src/app/services/orgaoautuador.service';
 import { OrgaoAutuador } from 'src/app/models/OrgaoAutuador';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'multa',
@@ -17,37 +18,60 @@ import { OrgaoAutuador } from 'src/app/models/OrgaoAutuador';
 export class MultaComponent {
 
   constructor(public menuService: MenuService, public formBuilder: FormBuilder,
-    public authService: AuthService, public multaService: MultaService,
-    public OrgaoAutuadorService: OrgaoAutuadorService ) {}
+    public authService: AuthService, public MultaService: MultaService,
+    public OrgaoAutuadorService: OrgaoAutuadorService, private router: Router,
+    private route: ActivatedRoute) { }
 
-listOrgaosAutuadores = new Array<SelectModel>();
-orgaoAutuadorSelect = new SelectModel();
-
-  multaForm : FormGroup;
-
-  ngOnInit(){
-    debugger
-    this.menuService.menuSelecionado = 7;
-    
-    this.multaForm = this.formBuilder.group(
-        {
-          name: ['', [Validators.required]],
-          descricao: ['', [Validators.required]],
-          orgaoAutuadorSelect: ['', [Validators.required]]
-        }
-      )
-      this.ListagemMultas();        
-      this.configpag();
-    }
-
+  //#region Variáveis globais
+  listOrgaosAutuadores = new Array<SelectModel>();
+  multaForm: FormGroup;
   tipoTela: number = 1;// 1 listagem, 2 cadastro, 3 edição
   tableListMultas: Array<Multa>;
   id: string;
-
+  rowId: number = 0;
   page: number = 1;
   config: any;
   paginacao: boolean = true;
   itemsPorPagina: number = 10
+  listOrgaoAutuador: Array<OrgaoAutuador>;
+  dropdownListOrgaoAutuador = [];
+  selectedOrgaoAutuador = [];
+  dropdownSettingsOrgaoAutuador = {};
+
+
+  ngOnInit() {
+    debugger
+    this.menuService.menuSelecionado = 7;
+
+    this.multaForm = this.formBuilder.group(
+      {
+        codigo: ['', [Validators.required]],
+        descricao: ['', [Validators.required]],
+        OrgaoAutuadorSelect: ['', [Validators.required]]
+      }
+    )
+    this.ListagemMultas();
+    this.configpag();
+    this.DropDownConfig();
+  }
+
+  DropDownConfig() {
+
+    //Veiculos
+    this.dropdownSettingsOrgaoAutuador = {
+      singleSelection: true,
+      idField: 'Id',
+      textField: 'Nome',
+      selectAllText: 'Marcar todos',
+      unSelectAllText: 'Desmarcar todos',
+      clientesShowLimit: 1,
+      allowSearchFilter: true,
+      searchPlaceholderText: "Procurar",
+      noDataAvailablePlaceholderText: "Orgão Autuador não cadastrado"
+    };
+  }
+
+
 
   configpag() {
     this.id = this.gerarIdParaConfigDePaginacao();
@@ -70,11 +94,11 @@ orgaoAutuadorSelect = new SelectModel();
     return result;
   }
 
-  cadastro()
-  {
+  cadastro() {
     this.tipoTela = 2;
     this.ListarOrgaoAutuador();
     this.multaForm.reset();
+    this.selectedOrgaoAutuador = new Array<OrgaoAutuador>;
   }
 
   mudarItemsPorPage() {
@@ -87,12 +111,16 @@ orgaoAutuadorSelect = new SelectModel();
     this.page = event;
     this.config.currentPage = this.page;
   }
-  
+
   ListagemMultas() {
-    
+
     this.tipoTela = 1;
-    
-    this.multaService.ListarMulta()
+    this.multaForm.reset();
+    this.router.navigate(
+      ['/multa']
+    );
+
+    this.MultaService.ListarMulta()
       .subscribe((response: Array<Multa>) => {
 
         this.tableListMultas = response;
@@ -101,51 +129,131 @@ orgaoAutuadorSelect = new SelectModel();
         () => { })
   }
 
-    // Pega os dados do form 
-    dadosForm()
-    {
-      return this.multaForm.controls;
-    }
+  // Pega os dados do form 
+  dadosForm() {
+    return this.multaForm.controls;
+  }
 
-    enviar(){
-      
-      var dados = this.dadosForm();      
+  enviar() {
 
-      let item = new Multa();      
-      item.Id = 0;
-      item.Descricao = dados["descricao"].value
-      item.OrgaoAutuadorId = parseInt(this.orgaoAutuadorSelect.id)
-      
-      item.NomePropriedade = '';
-      item.Mensagem = '';
-      
+    let action;
 
-      this.multaService.AdicionarMulta(item)
+    this.route.queryParamMap
+      .subscribe(params => {
+        action = params.get('action');
+      });
+    var dados = this.dadosForm();
+
+    let item = new Multa();
+    item.Id = 0;
+    item.Codigo = dados["codigo"].value
+    item.Descricao = dados["descricao"].value
+
+    item.NomePropriedade = '';
+    item.Mensagem = '';
+
+    this.selectedOrgaoAutuador.forEach((currentValue, index) => {
+      item.OrgaoAutuadorId = currentValue.Id;
+    });
+
+    if (action === 'edit') {
+      //Recupero o Id do registro que está em edição
+      item.Id = this.rowId;
+      this.MultaService.AtualizarMulta(item)
         .subscribe((response: Multa) => {
-  
-      this.multaForm.reset();                
+
+          alert('Alterado com sucesso!')
+          this.ListagemMultas();
+
+        }, (error) => console.error(error),
+          () => { })
+    }
+    else {
+      this.MultaService.AdicionarMulta(item)
+        .subscribe((response: Multa) => {
+
+          alert('Cadastrado com sucesso!')
+          this.ListagemMultas();
+
+        }, (error) => console.error(error),
+          () => { })
+
+
+    }        
+  }
+
+  ListarOrgaoAutuador() {
+
+    this.OrgaoAutuadorService.ListarOrgaoAutuador()
+      .subscribe((response: Array<OrgaoAutuador>) => {
+
+        this.listOrgaoAutuador = response;
+        this.dropdownListOrgaoAutuador = this.listOrgaoAutuador;
+      }
+      )
+  }
+
+  //#region Métodos dropdown  
+  onItemSelectOrgaoAutuador(item: any) {
+    this.selectedOrgaoAutuador = [];
+    this.selectedOrgaoAutuador.push(item);
+  }
+
+  onDeSelectOrgaoAutuador(item: any) {
+    this.selectedOrgaoAutuador = this.selectedOrgaoAutuador.filter((el) => el !== item);
+    this.listOrgaoAutuador = new Array<OrgaoAutuador>();
+  }
+  //#endregion
+
+  //#region Métodos de exclusão e alteração
+  OnclickEdit(row) {
+    this.loadCadastro(row);
+    this.tipoTela = 2;
+    this.selectedOrgaoAutuador = new Array<OrgaoAutuador>();
+    this.router.navigate(
+      ['/multa'],
+      { queryParams: { 'id': row['Id'], 'action': 'edit' } }
+    );
+  }
+
+  OnclickDelete(row) {
+    this.MultaService.DeleteMulta(row.Id)
+      .subscribe((response: Multa) => {
+        alert('Excluído com sucesso!')
+        this.ListagemMultas();
+      }, (error) => console.error(error),
+        () => { })
+  }
+
+  loadCadastro(row: any) {
+
+    this.tipoTela = 2;
+    this.ListarOrgaoAutuador();
+    this.MultaService.ObterMulta(row.Id)
+      .subscribe((response: Array<Multa>) => {
+        this.rowId = row.Id;
+
+        this.multaForm.patchValue(
+          {
+            codigo: row.Codigo,
+            descricao: row.Descricao
+          }
+        );
+
+        //Recupera o Orgão Autuador do cliente
+        this.OrgaoAutuadorService.ObterOrgaoAutuador(row.OrgaoAutuador.Id)
+          .subscribe((response: Array<OrgaoAutuador>) => {
+
+            this.selectedOrgaoAutuador = new Array<OrgaoAutuador>();
+            response.forEach((currentValue, index) => {
+              this.selectedOrgaoAutuador.push(currentValue);
+            });
+
+          }, (error) => console.error(error),
+            () => { })
 
       }, (error) => console.error(error),
         () => { })
-
-      }  
-
-    ListarOrgaoAutuador(){
-      
-      this.OrgaoAutuadorService.ListarOrgaoAutuador()
-        .subscribe((response: Array<OrgaoAutuador>) => {
-        
-          var lisOrgaoAutuador = [];
-          response.forEach(x => {
-                var item = new SelectModel();
-                item.id = x.Id.toString();
-                item.name = x.Nome;                
-                
-                lisOrgaoAutuador.push(item);
-          });
-
-          this.listOrgaosAutuadores = lisOrgaoAutuador;
-      }         
-      )
-    }
+  }
+  //#endregion    
 }

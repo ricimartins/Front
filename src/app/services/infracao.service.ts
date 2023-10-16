@@ -32,4 +32,16 @@ export class InfracaoService
         return this.httpClient.get(`${this.baseUrl}/ListarInfracao`);
     }
 
+    ObterInfracao(id: number) {
+        return this.httpClient.get(`${this.baseUrl}/ObterInfracao?Id=${id}`);
+    }
+
+    AtualizarInfracao(infracao: Infracao) {
+        return this.httpClient.put<Infracao>(`${this.baseUrl}/AtualizarInfracao`,
+            infracao);
+    }
+    DeleteInfracao(id: number) {
+        return this.httpClient.delete(`${this.baseUrl}/DeleteInfracao?Id=${id}`);
+    }
+
 }

@@ -22,9 +22,9 @@ export class VeiculoService
             veiculo);
     }
 
-    ListarVeiculosUsuario(emailUsuario:string)
+    ListarVeiculoCliente(clienteId : number)
     {
-        return this.httpClient.get(`${this.baseUrl}/ListarVeiculosUsuario?emailUsuario=${emailUsuario}`);
+        return this.httpClient.get(`${this.baseUrl}/ListarVeiculoCliente?clienteId=${clienteId}`);
     }    
 
     ListarVeiculo()

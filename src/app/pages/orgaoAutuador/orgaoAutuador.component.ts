@@ -5,6 +5,7 @@ import { AuthService } from 'src/app/services/auth.service';
 import { MenuService } from 'src/app/services/menu.service';
 import { OrgaoAutuadorService } from 'src/app/services/orgaoautuador.service';
 import { FormsModule } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'orgaoaAutuador',
@@ -13,28 +14,14 @@ import { FormsModule } from '@angular/forms';
 })
 export class OrgaoAutuadorComponent {
 
-  constructor(public menuService: MenuService, public formBuilder: FormBuilder, 
-    public orgaoautuadorService: OrgaoAutuadorService, public authService: AuthService) {}
+  constructor(public menuService: MenuService, public formBuilder: FormBuilder,
+    public orgaoautuadorService: OrgaoAutuadorService, public authService: AuthService,
+    private router: Router, private route: ActivatedRoute) { }
 
-  orgaoautuadorForm : FormGroup;
-
-  ngOnInit(){
-  
-  this.menuService.menuSelecionado = 8;
-
-  this.configpag();
-  this.ListaOrgaoAutuador();
-  
-  this.orgaoautuadorForm = this.formBuilder.group(
-      {
-        name: ['', [Validators.required]],
-        uf: ['', [Validators.required]]
-        
-      }
-    )
-  }
-
-  tipoTela: number = 1;// 1 listagem, 2 cadastro, 3 edição
+  //#region Variáveis globais
+  orgaoautuadorForm: FormGroup;
+  rowId: number = 0;
+  tipoTela: number = 1;// 1 listagem, 2 cadastro
   tableListOrgaoAutuadors: Array<OrgaoAutuador>;
   id: string;
 
@@ -42,6 +29,23 @@ export class OrgaoAutuadorComponent {
   config: any;
   paginacao: boolean = true;
   itemsPorPagina: number = 10
+  //#endregion
+
+  ngOnInit() {
+
+    this.menuService.menuSelecionado = 8;
+
+    this.configpag();
+    this.ListaOrgaoAutuador();
+
+    this.orgaoautuadorForm = this.formBuilder.group(
+      {
+        name: ['', [Validators.required]],
+        uf: ['', [Validators.required]]
+      }
+    )
+  }
+
 
   configpag() {
     this.id = this.gerarIdParaConfigDePaginacao();
@@ -65,8 +69,7 @@ export class OrgaoAutuadorComponent {
     return result;
   }
 
-  cadastro()
-  {
+  cadastro() {
     this.tipoTela = 2;
     this.orgaoautuadorForm.reset();
   }
@@ -81,12 +84,12 @@ export class OrgaoAutuadorComponent {
     this.page = event;
     this.config.currentPage = this.page;
   }
-  
+
 
   ListaOrgaoAutuador() {
     this.tipoTela = 1;
-        
-    this.orgaoautuadorService.ListarOrgaoAutuador() 
+
+    this.orgaoautuadorService.ListarOrgaoAutuador()
       .subscribe((response: Array<OrgaoAutuador>) => {
 
         this.tableListOrgaoAutuadors = response;
@@ -96,36 +99,93 @@ export class OrgaoAutuadorComponent {
 
   }
 
-    // Pega os dados do form 
-    dadosForm()
-    {
-      return this.orgaoautuadorForm.controls;
+  // Pega os dados do form 
+  dadosForm() {
+    return this.orgaoautuadorForm.controls;
+  }
+
+  enviar() {
+
+    let action;
+
+    this.route.queryParamMap
+      .subscribe(params => {
+        action = params.get('action');
+      });
+
+    var dados = this.dadosForm();
+
+    let item = new OrgaoAutuador();
+    item.Id = 0;
+    item.Nome = dados["name"].value;
+    item.UF = dados["uf"].value;
+
+    item.NomePropriedade = '';
+    item.Mensagem = '';
+
+    if (action === 'edit') {
+      //Recupero o Id do registro que está em edição
+      item.Id = this.rowId;
+      this.orgaoautuadorService.AtualizarOrgaoAutuador(item)
+        .subscribe((response: OrgaoAutuador) => {
+
+          alert('Alterado com sucesso!')
+          this.ListaOrgaoAutuador();
+
+        }, (error) => console.error(error),
+          () => { })
     }
-
-    enviar(){
-      
-      var dados = this.dadosForm();      
-
-      let item = new OrgaoAutuador();
-      item.Id = 0;
-      item.Nome = dados["name"].value;      
-      item.UF = dados["uf"].value;
-
-      item.NomePropriedade = '';
-      item.Mensagem = '';
-
+    else {
       this.orgaoautuadorService.AdicionarOrgaoAutuador(item)
         .subscribe((response: OrgaoAutuador) => {
-  
-      this.orgaoautuadorForm.reset();
-      debugger      
 
-      }, (error) => console.error(error),
-        () => { })
+          this.orgaoautuadorForm.reset();
+          debugger
 
-      }        
-    
+        }, (error) => console.error(error),
+          () => { })
     }
 
-  
+  }
+
+  //#region Métodos de exclusão e alteração
+  OnclickEdit(row) {
+    this.loadCadastro(row);
+    this.tipoTela = 2;
+    this.router.navigate(
+      ['/orgaoAutuador'],
+      { queryParams: { 'id': row['Id'], 'action': 'edit' } }
+    );
+  }
+
+  OnclickDelete(row) {
+    this.orgaoautuadorService.DeleteOrgaoAutuador(row.Id)
+      .subscribe((response: OrgaoAutuador) => {
+        alert('Excluído com sucesso!')
+        this.ListaOrgaoAutuador();
+      }, (error) => console.error(error),
+        () => { })
+  }
+
+  loadCadastro(row: any) {
+
+    this.tipoTela = 2;
+    this.orgaoautuadorService.ObterOrgaoAutuador(row.Id)
+      .subscribe((response: Array<OrgaoAutuador>) => {
+        this.rowId = row.Id;
+
+        this.orgaoautuadorForm.patchValue(
+          {
+            name: row.Nome,
+            uf: row.UF
+          }
+        );
+      }, (error) => console.error(error),
+        () => { })
+  }
+  //#endregion    
+
+}
+
+
 
