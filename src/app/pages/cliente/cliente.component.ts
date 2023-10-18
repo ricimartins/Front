@@ -303,16 +303,17 @@ export class ClienteComponent implements OnInit {
 
   //#region Métodos dropdown
   onItemSelect(item: any) {
+  }  
+
+  onDeSelect(item: any) {
+    this.selectedVeiculos = this.selectedVeiculos.filter((el) => el !== item);
   }
+
   onSelectAll(items: any) {
     this.selectedVeiculos = new Array<Veiculo>();
     items.forEach((currentValue, index) => {
       this.selectedVeiculos.push(currentValue);
     });
-  }
-
-  onDeSelect(item: any) {
-    this.selectedVeiculos = this.selectedVeiculos.filter((el) => el !== item);
   }
 
   onDeSelectAll(item: any) {

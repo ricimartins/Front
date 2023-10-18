@@ -41,7 +41,7 @@ export class LoginComponent {
           this.authService.setToken(token);
           this.authService.setEmailUser(this.dadosForm["email"].value);
           this.authService.UsuarioAutenticado(true);          
-          this.router.navigate(['/dashboard']);
+          this.router.navigate(['/home']);
         },
         err =>{
           alert('Ocorreu um erro');

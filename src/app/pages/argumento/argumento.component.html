@@ -7,48 +7,65 @@
                 Cadastro de Argumentos
             </div>
             <div (click)="ListagemArgumentos()" class="card-menu">Listagem de Argumentos</div>
-        </div>         
-    
-        <form class="form-page" [formGroup]="argumentoForm" (submit)="enviar()" >
-            <div class="row">
-                <div class="group-row">
-                    <label>Nome</label>
-                    <input type="text" name="name" id="name" placeholder="Nome" formControlName="name" required />
-                    <label class="error-input" *ngIf="argumentoForm.get('name')?.errors?.['required'] &&
-                    argumentoForm.get('name')?.touched">
-                        Campo Obrigatório!
-                    </label>
-                </div>
-            </div>
+        </div>
 
-            <div class="row">
-                <div class="group-row">
-                    <label>Descrição</label>
-                    <input type="text" name="descricao" id="descricao" placeholder="Descrição" formControlName="descricao" required />
-                    <label class="error-input" *ngIf="argumentoForm.get('descricao')?.errors?.['required'] &&
+        <form [formGroup]="argumentoForm" (submit)="enviar()">
+            <div class="page">
+                <div class="row">
+                    <div class="group-row">
+                        <label>Descrição</label>
+                        <input type="text" name="descricao" id="descricao" placeholder="Descrição"
+                            formControlName="descricao" required />
+                        <label class="error-input" *ngIf="argumentoForm.get('descricao')?.errors?.['required'] &&
                     argumentoForm.get('descricao')?.touched">
-                        Campo Obrigatório!
-                    </label>
+                            Campo Obrigatório!
+                        </label>
+                    </div>
                 </div>
-            </div>            
 
-            <div class="row">
-                <div class="group-row">
-                    <label>Multa</label>
-                    <ng-select class="select-padrao" formControlName="multaSelect" [(ngModel)]="multaSelect" [items]="listMultas" bindLabel="name" [multiple]="false" [clearable]="false" [searchable]="false"></ng-select>
+                <div class="row">
+                    <div class="group-row">
+                        <label>Detalhe</label>
+                        <input type="text" name="detalhe" id="detalhe" placeholder="Detalhe"
+                            formControlName="detalhe" required />
+                        <label class="error-input" *ngIf="argumentoForm.get('detalhe')?.errors?.['required'] &&
+                    argumentoForm.get('detalhe')?.touched">
+                            Campo Obrigatório!
+                        </label>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="group-row">
+                        <label>Multa</label>
+                        <ng-multiselect-dropdown [placeholder]="'Selecione...'" formControlName="MultaSelect"
+                            [settings]="dropdownSettingsMulta" [data]="dropdownListMulta" [(ngModel)]="selectedMulta"
+                            (onSelect)="onItemSelect($event)" (onDeSelect)="onDeSelect($event)"
+                            (onSelectAll)="onSelectAll($event)" (onDeSelectAll)="onDeSelectAll($event)"
+                            class="dropdown-btn">
+                        </ng-multiselect-dropdown>
+                        <label class="error-input" *ngIf="argumentoForm.get('MultaSelect')?.errors?.['required'] &&
+                    argumentoForm.get('MultaSelect')?.touched">
+                            Campo Obrigatório!
+                        </label>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="group-row">
+                        <label>Anexo</label>
+                        <input type="file" class="file-upload" onchange="console.log(event.target.files)"
+                            (change)="InputChange($event)" formControlName="anexo" id="anexo" name="anexo"
+                            accept="application/pdf,.csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">
+                    </div>
                 </div>
             </div>
-
-            <div class="row">
-                <div class="group-row">
-                    <label>Anexo</label>
-                    <input type="file" class="file-upload" onchange="console.log(event.target.files)" (change)="InputChange($event)" formControlName="anexo" id="anexo" name="anexo" accept = "application/pdf,.csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">                     
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="group-row">
-                    <input type="submit" value="Salvar" class="btn-primary" />
+            <div class="footer-btn">
+                <div class="row">
+                    <div class="group-row">
+                        <input type="button" value="Cancelar" class="btn-primary" (click)="tipoTela = 1"/>
+                        <input type="submit" value="Salvar" class="btn-primary" />
+                    </div>
                 </div>
             </div>
         </form>
@@ -70,26 +87,34 @@
             <table cellspacing="0" cellpadding="0">
                 <thead>
                     <tr>
-                        <!-- <td></td> -->
-                        <td>Código</td>                        
+                        <td>Código</td>
                         <td>Descrição</td>
-                        <td>Multa</td>
-                        <td>Anexo</td>
+                        <td>Detalhe</td>
                         <td>Ação</td>
-                        <td>Ação</td>
-
                     </tr>
                 </thead>
                 <tbody>
                     <tr class="select-item" *ngFor="let item of tableListArgumentos | paginate: config; let i = index"
-                        class="linha-table" [ngClass]="{'linha-cinza' : i % 2 == 0, 'linha-branca' : i % 2 !== 0}" >
+                        class="linha-table" [ngClass]="{'linha-cinza' : i % 2 == 0, 'linha-branca' : i % 2 !== 0}">
 
-                        <td>{{item.Id}}</td>                        
+                        <td>{{item.Id}}</td>
                         <td>{{item.Descricao}}</td>
-                        <td>{{item.Multa.Codigo}}</td>
-                        <td>Baixar</td>
-                        <td (click)="OnclickEdit(item)">Editar</td>
-                        <td (click)="OnclickDelete(item)">Excluir</td>
+                        <td>{{item.Detalhe}}</td>
+                        <td>
+                            <button mat-icon-button [matMenuTriggerFor]="menu">
+                                <mat-icon>menu</mat-icon>
+                            </button>
+                            <mat-menu #menu="matMenu">
+                                <button mat-menu-item (click)="OnclickEdit(item)">
+                                    <mat-icon>edit</mat-icon>
+                                    <span>Alterar</span>
+                                </button>
+                                <button mat-menu-item (click)="OnclickDelete(item)">
+                                    <mat-icon>delete</mat-icon>
+                                    <span>Excluir</span>
+                                </button>
+                            </mat-menu>
+                        </td>
                     </tr>
                 </tbody>
             </table>

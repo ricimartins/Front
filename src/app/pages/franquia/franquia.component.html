@@ -14,8 +14,8 @@
             </div>
         </div>
 
-        <form class="form-page" [formGroup]="franquiaForm" (submit)="enviar()">
-
+        <form [formGroup]="franquiaForm" (submit)="enviar()">
+            <div class="page">
             <div class="row">
                 <div class="group-row">
                     <label>Nome da franquia</label>
@@ -59,13 +59,16 @@
                     </label>
                 </div>
             </div>            
-        
-            <div class="row">
-                <div class="group-row">
-                    <input type="submit" value="Salvar" class="btn-primary" />
+                    
+            </div>
+            <div class="footer-btn">
+                <div class="row">
+                    <div class="group-row">
+                        <input type="button" value="Cancelar" class="btn-primary" (click)="tipoTela = 1"/>
+                        <input type="submit" value="Salvar" class="btn-primary" />
+                    </div>
                 </div>
             </div>
-
         </form>
 
     </div>
@@ -117,7 +120,6 @@
                                 </button>                                
                               </mat-menu>
                         </td>
-
                     </tr>
                 </tbody>
             </table>

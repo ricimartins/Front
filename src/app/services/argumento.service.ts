@@ -32,9 +32,9 @@ export class ArgumentoService
         return this.httpClient.get(`${this.baseUrl}/ListarArgumento`);
     }
 
-    ListarArgumentoById(id:number)
+    ObterArgumento(id:number)
     {
-        return this.httpClient.get(`${this.baseUrl}/ListarArgumentoById?Id=${id}`);
+        return this.httpClient.get(`${this.baseUrl}/ObterArgumento?Id=${id}`);
     }
 
     AtualizarArgumento(argumento:Argumento)

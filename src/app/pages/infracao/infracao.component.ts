@@ -43,8 +43,7 @@ export class InfracaoComponent {
   listVeiculo: Array<Veiculo>;
   dropdownListVeiculo = [];
   selectedVeiculo = [];
-  dropdownSettingsVeiculo = {};
-  disabledVeiculoSelect: boolean = true;
+  dropdownSettingsVeiculo = {};  
 
   listCliente: Array<Cliente>;
   dropdownListCliente = [];
@@ -65,6 +64,7 @@ export class InfracaoComponent {
     this.infracaoForm = this.formBuilder.group(
       {
         pontuacao: ['', [Validators.required]],
+        data: ['', [Validators.required]],
         veiculoSelect: ['', [Validators.required]],
         multaSelect: ['', [Validators.required]],
         clienteSelect: ['', [Validators.required]]
@@ -194,6 +194,8 @@ export class InfracaoComponent {
     let infracao = new Infracao();
     infracao.Id = 0;
     infracao.Pontuacao = dados["pontuacao"].value;
+    infracao.Data = dados["data"].value;    
+
     this.selectedCliente.forEach((currentValue, index) => {
       infracao.ClienteId = currentValue.Id;
     });
@@ -263,9 +265,7 @@ export class InfracaoComponent {
           this.listVeiculo.push(currentValue.Veiculo);
         });
 
-        this.dropdownListVeiculo = this.listVeiculo;
-
-        this.disabledVeiculoSelect = !(this.listCliente.length > 0);
+        this.dropdownListVeiculo = this.listVeiculo;        
 
       }, (error) => console.error(error),
         () => { })
@@ -283,8 +283,7 @@ export class InfracaoComponent {
     this.selectedCliente = this.selectedCliente.filter((el) => el !== item);
     this.listVeiculo = new Array<Veiculo>();
     this.selectedVeiculo = [];
-    this.dropdownListVeiculo = this.listVeiculo
-    this.disabledVeiculoSelect = true;
+    this.dropdownListVeiculo = this.listVeiculo;    
   }
 
   //Veiculo
@@ -327,6 +326,13 @@ export class InfracaoComponent {
         () => { })
   }
 
+  OnClickDefesa(row) {
+    this.router.navigate(
+      ['/defesa'],
+      { queryParams: { 'clienteId': row.Id, 'action': 'new' } }
+    );    
+  }
+
   loadCadastro(row: any) {
 
     this.tipoTela = 2;
@@ -339,7 +345,8 @@ export class InfracaoComponent {
 
         this.infracaoForm.patchValue(
           {
-            pontuacao: row.Pontuacao
+            pontuacao: row.Pontuacao,
+            data: row.Data.toLocaleString().substring(0, 10)
           }
         );
 

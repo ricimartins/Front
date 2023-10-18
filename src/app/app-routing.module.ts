@@ -18,53 +18,63 @@ const routes: Routes = [
   {
     path: 'dashboard',
     loadChildren: () => import('./pages/dashboard/dashboard.module').then(m => m.DashboardModule),
-    canActivate:[AuthGuard]
+    canActivate: [AuthGuard]
   },
   {
     path: 'franquia',
     loadChildren: () => import('./pages/franquia/franquia.module').then(m => m.FranquiaModule),
-    canActivate:[AuthGuard]
+    canActivate: [AuthGuard]
   }
   ,
   {
     path: 'funcionario',
     loadChildren: () => import('./pages/funcionario/funcionario.module').then(m => m.FuncionarioModule),
-    canActivate:[AuthGuard]
+    canActivate: [AuthGuard]
   }
   ,
   {
     path: 'cliente',
     loadChildren: () => import('./pages/cliente/cliente.module').then(m => m.ClienteModule),
-    canActivate:[AuthGuard]
+    canActivate: [AuthGuard]
   }
   ,
   {
     path: 'veiculo',
     loadChildren: () => import('./pages/veiculo/veiculo.module').then(m => m.VeiculoModule),
-    canActivate:[AuthGuard]
+    canActivate: [AuthGuard]
   }
   ,
   {
     path: 'infracao',
     loadChildren: () => import('./pages/infracao/infracao.module').then(m => m.InfracaoModule),
-    canActivate:[AuthGuard]
+    canActivate: [AuthGuard]
   }
   ,
   {
     path: 'multa',
     loadChildren: () => import('./pages/multa/multa.module').then(m => m.MultaModule),
-    canActivate:[AuthGuard]
+    canActivate: [AuthGuard]
   },
   {
     path: 'orgaoAutuador',
     loadChildren: () => import('./pages/orgaoAutuador/orgaoAutuador.module').then(m => m.OrgaoAutuadorModule),
-    canActivate:[AuthGuard]
+    canActivate: [AuthGuard]
   },
   {
     path: 'argumento',
     loadChildren: () => import('./pages/argumento/argumento.module').then(m => m.ArgumentoModule),
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'home',
+    loadChildren: () => import('./pages/home/home.module').then(m => m.HomeModule),
     canActivate:[AuthGuard]
-  }  
+  },
+  {
+    path: 'defesa',
+    loadChildren: () => import('./pages/defesa/defesa.module').then(m => m.DefesaModule),
+    canActivate:[AuthGuard]
+  }
 ];
 
 @NgModule({

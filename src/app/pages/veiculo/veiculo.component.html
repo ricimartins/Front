@@ -10,95 +10,102 @@
             <div (click)="ListagemVeiculos()" class="card-menu">Listagem de Veiculos</div>
         </div>
 
-        <form class="form-page" [formGroup]="veiculoForm" (submit)="enviar()" >            
-
-            <div class="row">
-                <div class="group-row">
-                    <label>Placa</label>
-                    <input type="text" name="placa" id="placa" placeholder="Placa" formControlName="placa" required size="6" />
-                    <label class="error-input" *ngIf="veiculoForm.get('placa')?.errors?.['required'] &&
+        <form [formGroup]="veiculoForm" (submit)="enviar()">
+            <div class="page">
+                <div class="row">
+                    <div class="group-row">
+                        <label>Placa</label>
+                        <input type="text" name="placa" id="placa" placeholder="Placa" formControlName="placa" required
+                            size="6" />
+                        <label class="error-input" *ngIf="veiculoForm.get('placa')?.errors?.['required'] &&
                     veiculoForm.get('placa')?.touched">
-                        Campo Obrigatório!
-                    </label>
+                            Campo Obrigatório!
+                        </label>
+                    </div>
                 </div>
-            </div>
 
-            <div class="row">
-                <div class="group-row">
-                    <label>Renavam</label>
-                    <input type="text" name="renavam" id="renavam" placeholder="Renavam" formControlName="renavam" required />
-                    <label class="error-input" *ngIf="veiculoForm.get('renavam')?.errors?.['required'] &&
+                <div class="row">
+                    <div class="group-row">
+                        <label>Renavam</label>
+                        <input type="text" name="renavam" id="renavam" placeholder="Renavam" formControlName="renavam"
+                            required />
+                        <label class="error-input" *ngIf="veiculoForm.get('renavam')?.errors?.['required'] &&
                     veiculoForm.get('renavam')?.touched">
-                        Campo Obrigatório!
-                    </label>
+                            Campo Obrigatório!
+                        </label>
+                    </div>
                 </div>
-            </div>                    
 
-            <div class="row">
-                <div class="group-row">
-                    <label>Marca</label>
-                    <input type="text" name="marca" id="marca" placeholder="Marca" formControlName="marca" required />
-                    <label class="error-input" *ngIf="veiculoForm.get('marca')?.errors?.['required'] &&
+                <div class="row">
+                    <div class="group-row">
+                        <label>Marca</label>
+                        <input type="text" name="marca" id="marca" placeholder="Marca" formControlName="marca"
+                            required />
+                        <label class="error-input" *ngIf="veiculoForm.get('marca')?.errors?.['required'] &&
                     veiculoForm.get('marca')?.touched">
-                        Campo Obrigatório!
-                    </label>
+                            Campo Obrigatório!
+                        </label>
+                    </div>
                 </div>
-            </div>
 
-            <div class="row">
-                <div class="group-row">
-                    <label>Modelo</label>
-                    <input type="text" name="modelo" id="modelo" placeholder="Modelo" formControlName="modelo" required />
-                    <label class="error-input" *ngIf="veiculoForm.get('modelo')?.errors?.['required'] &&
+                <div class="row">
+                    <div class="group-row">
+                        <label>Modelo</label>
+                        <input type="text" name="modelo" id="modelo" placeholder="Modelo" formControlName="modelo"
+                            required />
+                        <label class="error-input" *ngIf="veiculoForm.get('modelo')?.errors?.['required'] &&
                     veiculoForm.get('modelo')?.touched">
-                        Campo Obrigatório!
-                    </label>
+                            Campo Obrigatório!
+                        </label>
+                    </div>
                 </div>
-            </div>
 
-            <div class="row">
-                <div class="group-row">
-                    <label>Ano</label>
-                    <input type="number" name="ano" id="ano" placeholder="Ano" formControlName="ano" required  />
-                    <label class="error-input" *ngIf="veiculoForm.get('ano')?.errors?.['required'] &&
+                <div class="row">
+                    <div class="group-row">
+                        <label>Ano</label>
+                        <input type="number" name="ano" id="ano" placeholder="Ano" formControlName="ano" required />
+                        <label class="error-input" *ngIf="veiculoForm.get('ano')?.errors?.['required'] &&
                     veiculoForm.get('ano')?.touched">
-                        Campo Obrigatório!
-                    </label>
+                            Campo Obrigatório!
+                        </label>
+                    </div>
                 </div>
-            </div>
 
-            <div class="row">
-                <div class="group-row">
-                    <label>Cor</label>
-                    <input type="text" name="cor" id="cor" placeholder="Cor" formControlName="cor" required />
-                    <label class="error-input" *ngIf="veiculoForm.get('cor')?.errors?.['required'] &&
+                <div class="row">
+                    <div class="group-row">
+                        <label>Cor</label>
+                        <input type="text" name="cor" id="cor" placeholder="Cor" formControlName="cor" required />
+                        <label class="error-input" *ngIf="veiculoForm.get('cor')?.errors?.['required'] &&
                     veiculoForm.get('cor')?.touched">
-                        Campo Obrigatório!
-                    </label>
+                            Campo Obrigatório!
+                        </label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="group-row">
+                        <label>Chassi</label>
+                        <input type="text" name="chassi" id="chassi" placeholder="Chassi" formControlName="chassi"
+                            required />
+                        <label class="error-input" *ngIf="veiculoForm.get('chassi')?.errors?.['required'] &&
+                    veiculoForm.get('chassi')?.touched">
+                            Campo Obrigatório!
+                        </label>
+                    </div>
                 </div>
             </div>
-
-            <div class="row">
-                <div class="group-row">
-                    <label>Chassi</label>
-                    <input type="text" name="chassi" id="chassi" placeholder="Chassi" formControlName="chassi" required />
-                    <label class="error-input" *ngIf="veiculoForm.get('chassi')?.errors?.['required'] &&
-                    veiculoForm.get('chassi')?.touched">
-                        Campo Obrigatório!
-                    </label>
-                </div>
-            </div>            
-
-            <div class="row">
-                <div class="group-row">
-                    <input type="submit" value="Salvar" class="btn-primary" />
+            <div class="footer-btn">
+                <div class="row">
+                    <div class="group-row">
+                        <input type="button" value="Cancelar" class="btn-primary" (click)="tipoTela = 1"/>
+                        <input type="submit" value="Salvar" class="btn-primary" />
+                    </div>
                 </div>
             </div>
         </form>
     </div>
 </div>
 
-<div  *ngIf="tipoTela == 1" class="container-base">
+<div *ngIf="tipoTela == 1" class="container-base">
     <div class="content-page">
         <div class="card-header">
             <div class="card-title">
@@ -133,17 +140,17 @@
                     <td>
                         <button mat-icon-button [matMenuTriggerFor]="menu">
                             <mat-icon>menu</mat-icon>
-                          </button>
-                          <mat-menu #menu="matMenu">
+                        </button>
+                        <mat-menu #menu="matMenu">
                             <button mat-menu-item (click)="OnclickEdit(item)">
-                              <mat-icon>edit</mat-icon>
-                              <span>Alterar</span>
+                                <mat-icon>edit</mat-icon>
+                                <span>Alterar</span>
                             </button>
                             <button mat-menu-item (click)="OnclickDelete(item)">
-                              <mat-icon>delete</mat-icon>
-                              <span>Excluir</span>
-                            </button>                                
-                          </mat-menu>
+                                <mat-icon>delete</mat-icon>
+                                <span>Excluir</span>
+                            </button>
+                        </mat-menu>
                     </td>
                 </tr>
             </tbody>
@@ -159,10 +166,10 @@
             </ng-select>
 
             <div class="container-pagination">
-                <pagination-controls id="{{this.id}}" previousLabel="Anterior" nextLabel="Próximo"
-                    [responsive]="true" (pageChange)="mudarPage($event)">
+                <pagination-controls id="{{this.id}}" previousLabel="Anterior" nextLabel="Próximo" [responsive]="true"
+                    (pageChange)="mudarPage($event)">
                 </pagination-controls>
             </div>
         </div>
     </div>
-</div>    
+</div>

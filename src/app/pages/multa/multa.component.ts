@@ -56,8 +56,7 @@ export class MultaComponent {
   }
 
   DropDownConfig() {
-
-    //Veiculos
+    
     this.dropdownSettingsOrgaoAutuador = {
       singleSelection: true,
       idField: 'Id',

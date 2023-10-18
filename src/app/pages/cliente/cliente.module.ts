@@ -1,7 +1,7 @@
 import { CommonModule } from "@angular/common";
 import { ClienteRoutingModule } from "./cliente-routing-module";
 import { ClienteComponent } from "./cliente.component";
-import { NgModule } from "@angular/core";
+import { NgModule, ViewChild } from "@angular/core";
 import { NavbarModule } from "src/app/components/navbar/navbar.module";
 import { SidebarModule } from "src/app/components/sidebar/sidebar.module";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
@@ -12,6 +12,8 @@ import { MatButtonModule } from "@angular/material/button";
 import { MatMenuModule } from "@angular/material/menu";
 import {MatTabsModule} from '@angular/material/tabs';
 import { NgMultiSelectDropDownModule } from "ng-multiselect-dropdown";
+import {MatAccordion, MatExpansionModule} from '@angular/material/expansion';
+
 
 @NgModule(
     {   
@@ -30,9 +32,11 @@ import { NgMultiSelectDropDownModule } from "ng-multiselect-dropdown";
             MatButtonModule,
             MatMenuModule,
             MatTabsModule,    
-            NgMultiSelectDropDownModule.forRoot()
+            NgMultiSelectDropDownModule.forRoot(),
+            MatExpansionModule
         ]
     }
 )
 
-export class ClienteModule{}
+export class ClienteModule{    
+}

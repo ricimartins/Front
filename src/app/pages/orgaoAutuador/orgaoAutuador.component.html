@@ -14,36 +14,38 @@
             </div>
         </div>
 
-        <form class="form-page" [formGroup]="orgaoautuadorForm" (submit)="enviar()">
-
-            <div class="row">
-                <div class="group-row">
-                    <label>Nome do Orgão Autuador</label>
-                    <input type="text" name="name" id="name" placeholder="Nome" formControlName="name" required />
-                    <label class="error-input" *ngIf="orgaoautuadorForm.get('name')?.errors?.['required'] &&
+        <form [formGroup]="orgaoautuadorForm" (submit)="enviar()">
+            <div class="page">
+                <div class="row">
+                    <div class="group-row">
+                        <label>Nome do Orgão Autuador</label>
+                        <input type="text" name="name" id="name" placeholder="Nome" formControlName="name" required />
+                        <label class="error-input" *ngIf="orgaoautuadorForm.get('name')?.errors?.['required'] &&
                     orgaoautuadorForm.get('name')?.touched">
-                        Campo Obrigatório!
-                    </label>
+                            Campo Obrigatório!
+                        </label>
+                    </div>
                 </div>
-            </div>
 
-            <div class="row">
-                <div class="group-row">
-                    <label>UF</label>
-                    <input type="text" name="uf" id="uf" placeholder="UF" formControlName="uf" required />
-                    <label class="error-input" *ngIf="orgaoautuadorForm.get('cnpj')?.errors?.['required'] &&
+                <div class="row">
+                    <div class="group-row">
+                        <label>UF</label>
+                        <input type="text" name="uf" id="uf" placeholder="UF" formControlName="uf" required />
+                        <label class="error-input" *ngIf="orgaoautuadorForm.get('cnpj')?.errors?.['required'] &&
                     orgaoautuadorForm.get('cnpj')?.touched">
-                        Campo Obrigatório!
-                    </label>
+                            Campo Obrigatório!
+                        </label>
+                    </div>
                 </div>
             </div>
-
-            <div class="row">
-                <div class="group-row">
-                    <input type="submit" value="Salvar" class="btn-primary" />
+            <div class="footer-btn">
+                <div class="row">
+                    <div class="group-row">
+                        <input type="button" value="Cancelar" class="btn-primary" (click)="tipoTela = 1"/>
+                        <input type="submit" value="Salvar" class="btn-primary" />
+                    </div>
                 </div>
             </div>
-
         </form>
 
     </div>
@@ -73,12 +75,13 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr class="select-item" *ngFor="let item of tableListOrgaoAutuadors | paginate: config; let i = index"
+                    <tr class="select-item"
+                        *ngFor="let item of tableListOrgaoAutuadors | paginate: config; let i = index"
                         class="linha-table" [ngClass]="{'linha-cinza' : i % 2 == 0, 'linha-branca' : i % 2 !== 0}">
 
                         <td>{{item.Id}}</td>
                         <td>{{item.Nome}}</td>
-                        <td>{{item.UF}}</td>    
+                        <td>{{item.UF}}</td>
                         <td>
                             <button mat-icon-button [matMenuTriggerFor]="menu">
                                 <mat-icon>menu</mat-icon>

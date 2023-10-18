@@ -5,7 +5,7 @@
             <!-- Aplica class via Angular. No código abaixo, caso o item de menu selecionado seja o menu em questão, aplica a class. Caso contrário remove -->
             <div class="caixa-menu caixa-menu-texto" (click)="selectMenu(1)" 
             [ngClass]="{'caixa-menu-select' : this.menuService.menuSelecionado == 1, '' : this.menuService.menuSelecionado != 1 }" >                
-                Dashboard
+                Home
             </div>            
         </div>        
         <div class="container-icone-menu">            
@@ -54,6 +54,12 @@
             <div class="caixa-menu caixa-menu-texto" (click)="selectMenu(9)" 
             [ngClass]="{'caixa-menu-select' : this.menuService.menuSelecionado == 9, '' : this.menuService.menuSelecionado != 9 }" >                
                 Argumento
+            </div>            
+        </div>
+        <div class="container-icone-menu">            
+            <div class="caixa-menu caixa-menu-texto" (click)="selectMenu(10)" 
+            [ngClass]="{'caixa-menu-select' : this.menuService.menuSelecionado == 10, '' : this.menuService.menuSelecionado != 10 }" >                
+                Defesa
             </div>            
         </div>
     </div>

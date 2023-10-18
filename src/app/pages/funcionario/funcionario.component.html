@@ -2,91 +2,82 @@
 <sidebar></sidebar>
 
 <div *ngIf="tipoTela == 2" class="container-base">
-    
+
     <div class="content-page">
         <div class="card-header">
             <div class="card-title">
                 Cadastro de Funcionarios
             </div>
             <div (click)="ListagemFuncionarios()" class="card-menu">Listagem de Funcionarios</div>
-        </div>         
-    
-        <form class="form-page" [formGroup]="funcionarioForm" (submit)="enviar()" >
-            <div class="row">
-                <div class="group-row">
-                    <label>Nome</label>
-                    <input type="text" name="name" id="name" placeholder="Nome" formControlName="name" required />
-                    <label class="error-input" *ngIf="funcionarioForm.get('name')?.errors?.['required'] &&
+        </div>
+
+        <form [formGroup]="funcionarioForm" (submit)="enviar()">
+            <div class="page">
+                <div class="row">
+                    <div class="group-row">
+                        <label>Nome</label>
+                        <input type="text" name="name" id="name" placeholder="Nome" formControlName="name" required />
+                        <label class="error-input" *ngIf="funcionarioForm.get('name')?.errors?.['required'] &&
                     funcionarioForm.get('name')?.touched">
-                        Campo Obrigatório!
-                    </label>
+                            Campo Obrigatório!
+                        </label>
+                    </div>
                 </div>
-            </div>
 
-            <div class="row">
-                <div class="group-row">
-                    <label>Telefone</label>
-                    <input type="text" name="telefone" id="telefone" placeholder="Telefone" formControlName="telefone" required />
-                    <label class="error-input" *ngIf="funcionarioForm.get('telefone')?.errors?.['required'] &&
+                <div class="row">
+                    <div class="group-row">
+                        <label>Telefone</label>
+                        <input type="text" name="telefone" id="telefone" placeholder="Telefone"
+                            formControlName="telefone" required />
+                        <label class="error-input" *ngIf="funcionarioForm.get('telefone')?.errors?.['required'] &&
                     funcionarioForm.get('telefone')?.touched">
-                        Campo Obrigatório!
-                    </label>
+                            Campo Obrigatório!
+                        </label>
+                    </div>
                 </div>
-            </div>
 
-            <!-- <div class="row">
-                <div class="group-row">
-                    <label>CPF</label>
-                    <input type="text" name="cpf" id="cpf" placeholder="CPF" formControlName="cpf" required />
-                    <label class="error-input" *ngIf="funcionarioForm.get('cpf')?.errors?.['required'] &&
-                    funcionarioForm.get('cpf')?.touched">
-                        Campo Obrigatório!
-                    </label>
-                </div>
-            </div> -->
-
-            <div class="row">
-                <div class="group-row">
-                    <label>E-mail</label>
-                    <input type="text" name="email" id="email" placeholder="E-mail" formControlName="email" required />
-                    <label class="error-input" *ngIf="funcionarioForm.get('email')?.errors?.['required'] &&
+                <div class="row">
+                    <div class="group-row">
+                        <label>E-mail</label>
+                        <input type="text" name="email" id="email" placeholder="E-mail" formControlName="email"
+                            required />
+                        <label class="error-input" *ngIf="funcionarioForm.get('email')?.errors?.['required'] &&
                     funcionarioForm.get('email')?.touched">
-                        Campo Obrigatório!
-                    </label>
+                            Campo Obrigatório!
+                        </label>
+                    </div>
                 </div>
-            </div>
 
-            <div class="row">
-                <div class="group-row">
-                    <label>Senha</label>
-                    <input type="password" name="seha" id="senha" placeholder="Senha" formControlName="senha" required />
-                    <label class="error-input" *ngIf="funcionarioForm.get('email')?.errors?.['required'] &&
+                <div class="row">
+                    <div class="group-row">
+                        <label>Senha</label>
+                        <input type="password" name="seha" id="senha" placeholder="Senha" formControlName="senha"
+                            required />
+                        <label class="error-input" *ngIf="funcionarioForm.get('email')?.errors?.['required'] &&
                     funcionarioForm.get('senha')?.touched">
-                        Campo Obrigatório!
-                    </label>
+                            Campo Obrigatório!
+                        </label>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="group-row">
+                        <label>Franquia</label>
+                        <ng-multiselect-dropdown formControlName="franquiaSelect" [placeholder]="'Selecione...'"
+                            [settings]="dropdownSettingsFranquia" [data]="dropdownListFranquia"
+                            [(ngModel)]="selectedItemsFranquia" (onSelect)="onItemSelect($event)"
+                            (onSelectAll)="onSelectAll($event)" (onDeSelect)="onDeSelect($event)"
+                            (onDeSelectAll)="onDeSelectAll($event)" class="dropdown-btn">
+                        </ng-multiselect-dropdown>
+                    </div>
                 </div>
             </div>
-
-            <div class="row">
-                <div class="group-row">
-                    <label>Franquia</label>                    
-                    <ng-multiselect-dropdown formControlName="franquiaSelect"
-                        [placeholder]="'Selecione...'"
-                        [settings]="dropdownSettingsFranquia"
-                        [data]="dropdownListFranquia"
-                        [(ngModel)]="selectedItemsFranquia"
-                        (onSelect)="onItemSelect($event)"
-                        (onSelectAll)="onSelectAll($event)"
-                        (onDeSelect)="onDeSelect($event)"
-                        (onDeSelectAll)="onDeSelectAll($event)"
-                        class="dropdown-btn">
-                        </ng-multiselect-dropdown>                    
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="group-row">
-                    <input type="submit" value="Salvar" class="btn-primary" />
+            <div class="footer-btn">
+                <div class="row">
+                    <div class="group-row">
+                        <input type="button" value="Cancelar" class="btn-primary" (click)="tipoTela = 1"/>
+                        <input type="submit" value="Salvar" class="btn-primary" />
+                    </div>
                 </div>
             </div>
         </form>
@@ -112,7 +103,7 @@
                         <td>Código</td>
                         <td>Nome</td>
                         <td>E-mail</td>
-                        <td>Telefone</td>                        
+                        <td>Telefone</td>
                         <td>Ação</td>
 
                     </tr>
@@ -124,22 +115,22 @@
                         <td>{{item.Id}}</td>
                         <td>{{item.Nome}}</td>
                         <td>{{item.Email}}</td>
-                        <td>{{item.Telefone}}</td>                        
+                        <td>{{item.Telefone}}</td>
 
                         <td>
                             <button mat-icon-button [matMenuTriggerFor]="menu">
                                 <mat-icon>menu</mat-icon>
-                              </button>
-                              <mat-menu #menu="matMenu">
+                            </button>
+                            <mat-menu #menu="matMenu">
                                 <button mat-menu-item (click)="OnclickEdit(item)">
-                                  <mat-icon>edit</mat-icon>
-                                  <span>Alterar</span>
+                                    <mat-icon>edit</mat-icon>
+                                    <span>Alterar</span>
                                 </button>
                                 <button mat-menu-item (click)="OnclickDelete(item)">
-                                  <mat-icon>delete</mat-icon>
-                                  <span>Excluir</span>
-                                </button>                                
-                              </mat-menu>
+                                    <mat-icon>delete</mat-icon>
+                                    <span>Excluir</span>
+                                </button>
+                            </mat-menu>
                         </td>
                     </tr>
                 </tbody>

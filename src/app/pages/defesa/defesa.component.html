@@ -1,52 +1,16 @@
 <navbar></navbar>
 <sidebar></sidebar>
-
 <div *ngIf="tipoTela == 2" class="container-base">
-
     <div class="content-page">
         <div class="card-header">
             <div class="card-title">
-                Cadastro de Infracões
+                Cadastro de Defesas
             </div>
-            <div (click)="ListagemInfracoes()" class="card-menu">Listagem de Infracões</div>
+            <div (click)="ListagemDefesas()" class="card-menu">Listagem de Defesas</div>
         </div>
 
-        <form [formGroup]="infracaoForm" (submit)="enviar()">
-            <div class="page">
-                <div class="row">
-                    <div class="group-row">
-                        <label>Data da infração</label>
-                        <input type="date" name="data" id="data" placeholder="Data da infração" formControlName="data"
-                            required />
-                        <label class="error-input" *ngIf="infracaoForm.get('data')?.errors?.['required'] &&
-                    infracaoForm.get('data')?.touched">
-                            Campo Obrigatório!
-                        </label>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="group-row">
-                        <label>Cliente</label>
-                        <ng-multiselect-dropdown [placeholder]="'Selecione...'" formControlName="clienteSelect"
-                            [settings]="dropdownSettingsCliente" [data]="dropdownListCliente"
-                            [(ngModel)]="selectedCliente" (onSelect)="onItemSelectCliente($event)"
-                            (onDeSelect)="onDeSelectCliente($event)" class="dropdown-btn">
-                        </ng-multiselect-dropdown>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="group-row">
-                        <label>Veiculo</label>
-                        <ng-multiselect-dropdown [placeholder]="'Selecione...'" formControlName="veiculoSelect"
-                            [settings]="dropdownSettingsVeiculo" [data]="dropdownListVeiculo"
-                            [(ngModel)]="selectedVeiculo" (onSelect)="onItemSelectVeiculo($event)"
-                            (onDeSelect)="onDeSelectVeiculo($event)" class="dropdown-btn">
-                        </ng-multiselect-dropdown>
-                    </div>
-                </div>
-
+        <form [formGroup]="defesaForm" (submit)="enviar()">
+            <div class="page">   
                 <div class="row">
                     <div class="group-row">
                         <label>Multa</label>
@@ -57,19 +21,24 @@
                         </ng-multiselect-dropdown>
                     </div>
                 </div>
-
+                
                 <div class="row">
                     <div class="group-row">
-                        <label>Pontuação</label>
-                        <input type="text" name="pontuacao" id="pontuacao" placeholder="Pontuação"
-                            formControlName="pontuacao" required />
-                        <label class="error-input" *ngIf="infracaoForm.get('pontuacao')?.errors?.['required'] &&
-                    infracaoForm.get('pontuacao')?.touched">
-                            Campo Obrigatório!
-                        </label>
+                        <label>Selecione os argumentos para defesa</label>
+                        <ng-multiselect-dropdown [placeholder]="'Selecione...'" formControlName="ArgumentoSelect"
+                            [settings]="dropdownSettingsArgumento" [data]="dropdownListArgumento"
+                            [(ngModel)]="selectedArgumento"
+                            (onSelect)="onItemSelectArgumento($event)"
+                            (onDeSelect)="onDeSelectArgumento($event)"
+                            (onSelectAll)="onSelectAllArgumento($event)"
+                            (onDeSelectAll)="onDeSelectAllArgumento($event)"
+                            class="dropdown-btn">
+                        </ng-multiselect-dropdown>                        
+                        <div [innerHTML]="argumentoHTML"></div>
                     </div>
                 </div>
-            </div>
+            </div>            
+
             <div class="footer-btn">
                 <div class="row">
                     <div class="group-row">
@@ -89,27 +58,22 @@
 
         <div class="header-info-2">
             <div class="card-header">
-                <div class="card-title">Listagem de Infracoes</div>
-                <div (click)="cadastro()" class="card-menu">Cadastro de Infracoes</div>
+                <div class="card-title">Listagem de Defesas</div>
+                <div (click)="cadastro()" class="card-menu">Cadastro de Defesas</div>
             </div>
+
             <table cellspacing="0" cellpadding="0">
                 <thead>
                     <tr>                        
-                        <td>Código</td>
-                        <td>Placa</td>
-                        <td>Cliente</td>
-                        <td>Multa</td>
+                        <td>Data</td>                        
                         <td>Ação</td>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr class="select-item" *ngFor="let item of tableListInfracoes | paginate: config; let i = index"
+                    <tr class="select-item" *ngFor="let item of tableListDefesas | paginate: config; let i = index"
                         class="linha-table" [ngClass]="{'linha-cinza' : i % 2 == 0, 'linha-branca' : i % 2 !== 0}">
 
-                        <td>{{item.Id}}</td>
-                        <td>{{item.Veiculo.Placa}}</td>
-                        <td>{{item.Cliente.Nome}}</td>
-                        <td>{{item.Multa.Descricao}}</td>
+                        <td>{{item.Data}}</td>                        
                         <td>
                             <button mat-icon-button [matMenuTriggerFor]="menu">
                                 <mat-icon>menu</mat-icon>
@@ -123,18 +87,13 @@
                                     <mat-icon>delete</mat-icon>
                                     <span>Excluir</span>
                                 </button>
-                                <button mat-menu-item (click)="OnClickDefesa(item)">
-                                    <mat-icon>description</mat-icon>
-                                    <span>Gerar defesa</span>
-                                </button>
                             </mat-menu>
                         </td>
-
                     </tr>
                 </tbody>
             </table>
 
-            <div class="tabela-footer" *ngIf="paginacao && tableListInfracoes">
+            <div class="tabela-footer" *ngIf="paginacao && tableListDefesas">
                 <label class="mostrar">Mostrar</label>
                 <ng-select (change)="mudarItemsPorPage()" [(ngModel)]="itemsPorPagina" [clearable]="false"
                     [searchable]="false" class="mostrar-drop">

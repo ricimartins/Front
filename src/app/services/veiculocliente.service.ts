@@ -1,7 +1,6 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { environment } from "src/environment";
-import { Veiculo } from "../models/Veiculo";
 import { VeiculoCliente } from "../models/VeiculoCliente";
 
 @Injectable({

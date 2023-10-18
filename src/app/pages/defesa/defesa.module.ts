@@ -1,6 +1,6 @@
 import { CommonModule } from "@angular/common";
-import { ArgumentoRoutingModule } from "./argumento-routing-module";
-import { ArgumentoComponent } from "./argumento.component";
+import { DefesaRoutingModule } from "./defesa-routing-module";
+import { DefesaComponent } from "./defesa.component";
 import { NgModule } from "@angular/core";
 import { NavbarModule } from "src/app/components/navbar/navbar.module";
 import { SidebarModule } from "src/app/components/sidebar/sidebar.module";
@@ -16,10 +16,10 @@ import { MatMenuModule } from "@angular/material/menu";
 @NgModule(
     {   
         providers:[],
-        declarations:[ArgumentoComponent],
+        declarations:[DefesaComponent],
         imports:[
             CommonModule,
-            ArgumentoRoutingModule,
+            DefesaRoutingModule,
             NavbarModule,
             SidebarModule,
             FormsModule,
@@ -29,10 +29,11 @@ import { MatMenuModule } from "@angular/material/menu";
             MatIconModule,
             NgMultiSelectDropDownModule.forRoot(),
             MatTabsModule,
+            MatIconModule,
             MatButtonModule,
             MatMenuModule
         ]
     }
 )
 
-export class ArgumentoModule{}
+export class DefesaModule{}

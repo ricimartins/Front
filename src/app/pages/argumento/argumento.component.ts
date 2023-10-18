@@ -9,6 +9,9 @@ import { MultaService } from 'src/app/services/multa.service';
 import { Multa } from 'src/app/models/Multa';
 import { Observable, ReplaySubject } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
+import { MultaArgumento } from 'src/app/models/MultaArgumento';
+import { MultaArgumentoService } from 'src/app/services/multaargumento.service';
+
 
 @Component({
   selector: 'argumento',
@@ -20,35 +23,14 @@ export class ArgumentoComponent {
 
   constructor(public menuService: MenuService, public formBuilder: FormBuilder,
     public authService: AuthService, public argumentoService: ArgumentoService,
-    public MultaService: MultaService, private router : Router, 
-    private route: ActivatedRoute ) {}
+    public MultaService: MultaService, private router: Router,
+    private route: ActivatedRoute, public multaArgumentoService: MultaArgumentoService) { }
 
-  listMultas = new Array<SelectModel>();
-  multaSelect = new SelectModel();
 
-  argumentoForm : FormGroup;
-
-  ngOnInit(){
-    debugger          
-
-    this.menuService.menuSelecionado = 9;
-    
-    this.argumentoForm = this.formBuilder.group(
-        {
-          name: ['', [Validators.required]],
-          descricao: ['', [Validators.required]],
-          multaSelect: ['', [Validators.required]],
-          anexo: ['', [Validators.required]]
-        }
-      )
-      this.ListagemArgumentos();        
-      this.configpag();
-    }
-
-  tipoTela: number = 1;// 1 listagem, 2 cadastro
+  //#region Variáveis globais    
+  tipoTela: number = 1; // 1 listagem, 2 cadastro
   tableListArgumentos: Array<Argumento>;
   id: string;
-  
   page: number = 1;
   config: any;
   paginacao: boolean = true;
@@ -56,6 +38,46 @@ export class ArgumentoComponent {
   base64Output: string;
   // Id selecionado para edição  
   rowId: number = 0;
+  argumentoForm: FormGroup;
+  listMulta: Array<Multa>;
+  dropdownListMulta = [];
+  selectedMulta = [];
+  dropdownSettingsMulta = {};
+  //#endregion
+
+  ngOnInit() {
+    debugger
+
+    this.menuService.menuSelecionado = 9;
+
+    this.argumentoForm = this.formBuilder.group(
+      {
+        descricao: ['', [Validators.required]],
+        detalhe: ['', [Validators.required]],
+        MultaSelect: ['', [Validators.required]],
+        anexo: ['', [Validators.required]]
+      }
+    )
+    this.ListagemArgumentos();
+    this.configpag();
+    this.DropDownConfig();
+  }
+
+  DropDownConfig() {
+
+    this.dropdownSettingsMulta = {
+      singleSelection: false,
+      idField: 'Id',
+      textField: 'Descricao',
+      selectAllText: 'Marcar todos',
+      unSelectAllText: 'Desmarcar todos',
+      clientesShowLimit: 3,
+      allowSearchFilter: true,
+      searchPlaceholderText: "Procurar",
+      noDataAvailablePlaceholderText: "Multa não cadastrada"
+    };
+  }
+
 
   configpag() {
     this.id = this.gerarIdParaConfigDePaginacao();
@@ -64,7 +86,7 @@ export class ArgumentoComponent {
       id: this.id,
       currentPage: this.page,
       itemsPerPage: this.itemsPorPagina
-    };    
+    };
   }
 
   gerarIdParaConfigDePaginacao() {
@@ -78,32 +100,41 @@ export class ArgumentoComponent {
     return result;
   }
 
-  cadastro()
-  {
+  cadastro() {
     this.tipoTela = 2;
     this.ListarMulta();
+    this.selectedMulta = new Array<Multa>();
     this.argumentoForm.reset();
   }
 
-  loadCadastro(row : any)
-  {
-    
+  loadCadastro(row: any) {
+
     this.tipoTela = 2;
     this.ListarMulta();
-    let multaSelect = new SelectModel();        
-
-    this.argumentoService.ListarArgumentoById(row.Id)
+    this.argumentoService.ObterArgumento(row.Id)
       .subscribe((response: Array<Argumento>) => {
         this.rowId = row.Id;
-        this.argumentoForm.controls["name"].setValue(row.Nome);
-        this.argumentoForm.controls["descricao"].setValue(row.Descricao);
-        multaSelect.id = row.Multa.Id;
-        multaSelect.name = row.Multa.Nome;
-        this.argumentoForm.controls["multaSelect"].setValue(multaSelect);
-        this.argumentoForm.controls["anexo"].setValue(row.anexo);
-                
+
+        this.argumentoForm.patchValue(
+          {
+            descricao: row.Descricao,
+            detalhe: row.Detalhe,
+            anexo: row.Anexo
+          }
+        );
+
+        this.multaArgumentoService.ListarByArgumento(row.Id)
+          .subscribe((response: Array<MultaArgumento>) => {
+
+            this.selectedMulta = new Array<Multa>();
+            response.forEach((currentValue, index) => {
+              this.selectedMulta.push(currentValue.Multa);
+            });
+
+          }, (error) => console.error(error),
+            () => { })
       }, (error) => console.error(error),
-        () => { })              
+        () => { })
   }
 
   mudarItemsPorPage() {
@@ -116,15 +147,15 @@ export class ArgumentoComponent {
     this.page = event;
     this.config.currentPage = this.page;
   }
-  
+
   ListagemArgumentos() {
-    
+
     this.tipoTela = 1;
 
     this.router.navigate(
       ['/argumento']
-    );      
-    
+    );
+
     this.argumentoService.ListarArgumento()
       .subscribe((response: Array<Argumento>) => {
 
@@ -134,117 +165,182 @@ export class ArgumentoComponent {
         () => { })
   }
 
-    // Pega os dados do form 
-    dadosForm()
-    {
-      return this.argumentoForm.controls;
-    }
+  // Pega os dados do form 
+  dadosForm() {
+    return this.argumentoForm.controls;
+  }
 
-    enviar(){
-      
-      let action;
-      
-      this.route.queryParamMap
-       .subscribe(params => {
-             action = params.get('action');     
-      });      
+  enviar() {
 
-      var dados = this.dadosForm();      
+    let action;
 
-      let item = new Argumento();      
-      item.Id = 0;
-      item.Descricao = dados["descricao"].value
-      item.MultaId = parseInt(this.multaSelect.id)
-      item.Anexo = this.base64Output;
-      
-      item.NomePropriedade = '';
-      item.Mensagem = '';
-      
-      if (action === 'edit'){
-        //Recupero o Id do registro que estão em edição
-        item.Id = this.rowId;        
-        
-        this.argumentoService.AtualizarArgumento(item)
+    this.route.queryParamMap
+      .subscribe(params => {
+        action = params.get('action');
+      });
+
+    var dados = this.dadosForm();
+
+    let argumento = new Argumento();
+    argumento.Id = 0;
+    argumento.Descricao = dados["descricao"].value
+    argumento.Detalhe = dados["detalhe"].value
+    argumento.Anexo = this.base64Output;
+    argumento.NomePropriedade = '';
+    argumento.Mensagem = '';
+
+    if (action === 'edit') {
+      //Recupero o Id do registro que estão em edição
+      argumento.Id = this.rowId;
+
+      this.argumentoService.AtualizarArgumento(argumento)
         .subscribe((response: Argumento) => {
-          
-          this.ListagemArgumentos();
-          this.router.navigate(
-            ['/argumento']
-          );                      
 
-        }, (error) => console.error(error),
-          () => { })  
+          // Busco as veiculos do cliente para cadastrar novamente
+          this.multaArgumentoService.ListarByArgumento(argumento.Id)
+            .subscribe((response: Array<MultaArgumento>) => {
 
-      }
-      else{
-        this.argumentoService.AdicionarArgumento(item)
-        .subscribe((response: Argumento) => {        
+              //Remove os veiculos atuais
+              response.forEach((currentValue, index) => {
+                this.multaArgumentoService.DeleteMultaArgumento(currentValue.Id)
+                  .subscribe((response: Array<MultaArgumento>) => {
+                  }, (error) => console.error(error),
+                    () => { })
+              });
+
+              this.selectedMulta.forEach((currentValue, index) => {
+                var multaArgumento = new MultaArgumento();
+                multaArgumento.Id = 0;
+                multaArgumento.ArgumentoId = argumento.Id;
+                multaArgumento.MultaId = currentValue.Id;
+
+                multaArgumento.Mensagem = '';
+                multaArgumento.NomePropriedade = '';
+
+                // Cadastra novamente as multas selecionadas
+                this.multaArgumentoService.AdicionarMultaArgumento(multaArgumento)
+                  .subscribe((response: MultaArgumento) => {
+
+                  }, (error) => console.error(error),
+                    () => { })
+              });
+
+              this.ListagemArgumentos();
+              this.router.navigate(
+                ['/argumento']
+              );
+
+            }, (error) => console.error(error),
+              () => { })
 
         }, (error) => console.error(error),
           () => { })
-      } 
 
-      this.argumentoForm.reset();                          
-    }  
+    }
+    else {
 
-    ListarMulta(){
-    
-      this.multaSelect = new SelectModel()
-      this.MultaService.ListarMulta()
-        .subscribe((response: Array<Multa>) => {
-        
-          var lisMulta = [];
-          response.forEach(x => {
-                var item = new SelectModel();
-                item.id = x.Id.toString();                                          
-                lisMulta.push(item);
+      this.argumentoService.AdicionarArgumento(argumento)
+        .subscribe((response: Argumento) => {
+
+          this.selectedMulta.forEach((currentValue, index) => {
+
+            var multaArgumento = new MultaArgumento();
+            multaArgumento.Id = 0;
+            multaArgumento.ArgumentoId = response.Id;
+            multaArgumento.MultaId = currentValue.Id;
+
+            multaArgumento.Mensagem = '';
+            multaArgumento.NomePropriedade = '';
+
+            //cadastra o veículo 
+            this.multaArgumentoService.AdicionarMultaArgumento(multaArgumento)
+              .subscribe((response: MultaArgumento) => {
+
+              }, (error) => console.error(error),
+                () => { })
           });
 
-          this.listMultas = lisMulta;
-      }         
-      )
-    }
-    
-    // Converte anexo selecionado para Base64
-    convertFile(file : File) : Observable<string> {
-      const result = new ReplaySubject<string>(1);
-      const reader = new FileReader();
-      reader.readAsBinaryString(file);
-      reader.onload = (event) => result.next(btoa(event.target.result.toString()));
-      return result;
-    }
-
-    // Anexo selecionado
-    InputChange(event) {
-      
-      this.convertFile((event.target as HTMLInputElement).files?.[0]).subscribe(base64 => {
-        this.base64Output = base64;
-      });      
-    }
-    
-    OnclickEdit(row){      
-      
-      this.loadCadastro(row);
-      this.tipoTela = 2;      
-      
-      this.router.navigate(
-        ['/argumento'],
-        { queryParams: { 'id': row['Id'], 'action' : 'edit' } }
-      );      
-    }
-
-    OnclickDelete(row){      
-      
-      
-      this.argumentoService.DeleteArgumento(row.Id)
-        .subscribe((response: Argumento) => {
-          
-          this.ListagemArgumentos();
-          this.router.navigate(
-            ['/argumento']
-          );                      
+          this.argumentoForm.reset();
 
         }, (error) => console.error(error),
           () => { })
-    }    
+    }
+  }
+
+  ListarMulta() {
+
+    this.MultaService.ListarMulta()
+      .subscribe((response: Array<Multa>) => {
+
+        this.listMulta = response;
+        this.dropdownListMulta = this.listMulta;
+      }
+      )
+  }
+
+  // Converte anexo selecionado para Base64
+  convertFile(file: File): Observable<string> {
+    const result = new ReplaySubject<string>(1);
+    const reader = new FileReader();
+    reader.readAsBinaryString(file);
+    reader.onload = (event) => result.next(btoa(event.target.result.toString()));
+    return result;
+  }
+
+  // Anexo selecionado
+  InputChange(event) {
+
+    this.convertFile((event.target as HTMLInputElement).files?.[0]).subscribe(base64 => {
+      this.base64Output = base64;
+    });
+  }
+
+  OnclickEdit(row) {
+
+    this.loadCadastro(row);
+    this.tipoTela = 2;
+
+    this.router.navigate(
+      ['/argumento'],
+      { queryParams: { 'id': row['Id'], 'action': 'edit' } }
+    );
+  }
+
+  OnclickDelete(row) {
+
+
+    this.argumentoService.DeleteArgumento(row.Id)
+      .subscribe((response: Argumento) => {
+
+        this.ListagemArgumentos();
+        this.router.navigate(
+          ['/argumento']
+        );
+
+      }, (error) => console.error(error),
+        () => { })
+  }
+
+  //#region Métodos dropdown  
+  onItemSelect(item: any) {
+    this.selectedMulta = [];
+    this.selectedMulta.push(item);
+  }
+
+  onDeSelect(item: any) {
+    this.selectedMulta = this.selectedMulta.filter((el) => el !== item);
+    this.listMulta = new Array<Multa>();
+  }
+
+  onSelectAll(items: any) {
+    this.selectedMulta = new Array<Multa>();
+    items.forEach((currentValue, index) => {
+      this.selectedMulta.push(currentValue);
+    });
+  }
+
+  onDeSelectAll(item: any) {
+    this.selectedMulta = new Array<Multa>();
+  }
+  //#endregion
 }

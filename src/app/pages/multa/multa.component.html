@@ -9,52 +9,53 @@
             <div (click)="ListagemMultas()" class="card-menu">Listagem de Multas</div>
         </div>
 
-        <form class="form-page" [formGroup]="multaForm" (submit)="enviar()">
-            <div class="row">
-                <div class="group-row">
-                    <label>Código</label>
-                    <input type="text" name="codigo" id="codigo" placeholder="Código" formControlName="codigo"
-                        required />
-                    <label class="error-input" *ngIf="multaForm.get('codigo')?.errors?.['required'] &&
+        <form [formGroup]="multaForm" (submit)="enviar()">
+            <div class="page">
+                <div class="row">
+                    <div class="group-row">
+                        <label>Código</label>
+                        <input type="text" name="codigo" id="codigo" placeholder="Código" formControlName="codigo"
+                            required />
+                        <label class="error-input" *ngIf="multaForm.get('codigo')?.errors?.['required'] &&
                     multaForm.get('codigo')?.touched">
-                        Campo Obrigatório!
-                    </label>
+                            Campo Obrigatório!
+                        </label>
+                    </div>
                 </div>
-            </div>
 
-            <div class="row">
-                <div class="group-row">
-                    <label>Descrição</label>
-                    <input type="text" name="descricao" id="descricao" placeholder="Descrição"
-                        formControlName="descricao" required />
-                    <label class="error-input" *ngIf="multaForm.get('descricao')?.errors?.['required'] &&
+                <div class="row">
+                    <div class="group-row">
+                        <label>Descrição</label>
+                        <input type="text" name="descricao" id="descricao" placeholder="Descrição"
+                            formControlName="descricao" required />
+                        <label class="error-input" *ngIf="multaForm.get('descricao')?.errors?.['required'] &&
                     multaForm.get('descricao')?.touched">
-                        Campo Obrigatório!
-                    </label>
+                            Campo Obrigatório!
+                        </label>
+                    </div>
                 </div>
-            </div>
 
-            <div class="row">
-                <div class="group-row">
-                    <label>Orgão Autuador</label>
-                    <ng-multiselect-dropdown [placeholder]="'Selecione...'" formControlName="OrgaoAutuadorSelect"
-                        [settings]="dropdownSettingsOrgaoAutuador"
-                        [data]="dropdownListOrgaoAutuador"
-                        [(ngModel)]="selectedOrgaoAutuador"
-                        (onSelect)="onItemSelectOrgaoAutuador($event)"
-                        (onDeSelect)="onDeSelectOrgaoAutuador($event)"
-                        class="dropdown-btn">
-                    </ng-multiselect-dropdown>
-                    <label class="error-input" *ngIf="multaForm.get('OrgaoAutuadorSelect')?.errors?.['required'] &&
+                <div class="row">
+                    <div class="group-row">
+                        <label>Orgão Autuador</label>
+                        <ng-multiselect-dropdown [placeholder]="'Selecione...'" formControlName="OrgaoAutuadorSelect"
+                            [settings]="dropdownSettingsOrgaoAutuador" [data]="dropdownListOrgaoAutuador"
+                            [(ngModel)]="selectedOrgaoAutuador" (onSelect)="onItemSelectOrgaoAutuador($event)"
+                            (onDeSelect)="onDeSelectOrgaoAutuador($event)" class="dropdown-btn">
+                        </ng-multiselect-dropdown>
+                        <label class="error-input" *ngIf="multaForm.get('OrgaoAutuadorSelect')?.errors?.['required'] &&
                     multaForm.get('OrgaoAutuadorSelect')?.touched">
-                        Campo Obrigatório!
-                    </label>
+                            Campo Obrigatório!
+                        </label>
+                    </div>
                 </div>
             </div>
-
-            <div class="row">
-                <div class="group-row">
-                    <input type="submit" value="Salvar" class="btn-primary" />
+            <div class="footer-btn">
+                <div class="row">
+                    <div class="group-row">
+                        <input type="button" value="Cancelar" class="btn-primary" (click)="tipoTela = 1"/>
+                        <input type="submit" value="Salvar" class="btn-primary" />
+                    </div>
                 </div>
             </div>
         </form>

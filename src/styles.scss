@@ -31,11 +31,10 @@ input {
 
   font-size: 15px;
   font-family: "Poppins";
-  text-transform: uppercase;  
+  text-transform: uppercase;
 }
 
-label {
-}
+label {}
 
 .error-input {
   font-size: 14px;
@@ -52,16 +51,17 @@ label {
     0 1px 5px 0 rgba(156, 39, 176, 0.12);
 
   cursor: pointer;
-  min-width: 150px;
+  min-width: 100px;
   width: auto;
+  padding: 5px;
+  margin: 5px;
 }
 
-.dropdown-btn
-{
+.dropdown-btn {
   background: #ffffff;
   box-sizing: border-box;
   min-width: 400px;
-  width: auto;  
+  width: auto;
   min-height: 50px;
   height: auto;
   //border: 1px solid #ccd4db;
@@ -71,18 +71,20 @@ label {
 
   font-size: 14px;
   font-family: "Poppins";
-  text-transform: uppercase;  
+  text-transform: uppercase;
 }
 
 .container-base {
   padding: 88px 16px 0px 168px;
+  //border: 10px solid #ccd4db;
 
   .content-page {
+    //border: 10px solid #ccd4db;
     background: white;
     padding: 16px;
     border-radius: 2px;
-    min-height: 800px;
-    min-width: 352px;
+    min-height: auto;
+    min-width: auto;
 
     .card-header {
       z-index: 3 !important;
@@ -112,21 +114,63 @@ label {
       }
     }
 
-    .form-page {
+    .page {
+      //border: 10px solid #ccd4db;
       display: grid;
-      grid-template-columns: auto;
-      justify-content: center;            
+      grid-template-columns: auto auto;
+      justify-content: center;
 
       .row {
-        display: flex;
+        //border: 10px solid #ccd4db;
+        display: grid;
         justify-content: center;
         align-items: center;
-        padding-bottom: 16px;        
-        
+        padding-bottom: 16px;
+
         .group-row {
           display: grid;
           padding: 5px;
-        }        
+        }
+      }
+    }
+
+    .home {
+      //border: 10px solid #ccd4db;
+      grid-template-columns: auto auto auto auto;
+      display: grid;
+      justify-content: center;
+      
+      .card-home {        
+        align-items: left;
+        margin: 10px;
+        padding-left: 16px;
+        font-size: 14px;
+        font-weight: 400;
+        //text-decoration: underline;
+        cursor: pointer;
+      }
+    }
+
+    .footer-btn {
+      display: grid;
+      justify-content: center;
+    }
+
+    .search {
+      //border: 10px solid #ccd4db;
+      //background-color: burlywood;          
+      justify-content: left;
+      grid-template-columns: auto;
+
+      .row {
+        //border: 10px solid #ccd4db;
+        display: grid;
+        align-items: center;
+        padding-bottom: 16px;
+
+        .group-row {
+          padding: 5px;
+        }
       }
     }
   }
@@ -143,7 +187,7 @@ label {
   color: #6e778b;
   font-size: 15px;
   font-family: "Poppins";
-  text-transform: uppercase;  
+  text-transform: uppercase;
 }
 
 ::ng-deep .ng-select.ng-select-single .ng-select-container {
@@ -279,4 +323,27 @@ table {
   color: #fefefe !important;
   cursor: default !important;
   border-radius: 5px !important;
+}
+
+:host {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.action-buttons {
+  padding-bottom: 20px;
+}
+
+.headers-align .mat-expansion-panel-header-description {
+  justify-content: space-between;
+  align-items: center;
+}
+
+.headers-align .mat-mdc-form-field+.mat-mdc-form-field {
+  margin-left: 8px;
+}
+
+.mat-mdc-form-field+.mat-mdc-form-field {
+  margin-left: 8px;
 }
