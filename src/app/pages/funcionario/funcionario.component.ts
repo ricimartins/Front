@@ -64,7 +64,12 @@ export class FuncionarioComponent {
           email: ['', [Validators.required]],
           franquiaSelect:['', [Validators.required]],
           senha:['', [Validators.required]],
-          //cpf:['', [Validators.required]]
+          cpf:['', [Validators.required]],
+          numeroOAB:['', [Validators.required]],
+          rg:['', [Validators.required]],
+          estadoCivil:['', [Validators.required]],
+          nacionalidade:['', [Validators.required]],
+          endereco:['', [Validators.required]]
         }
       )
       this.ListagemFuncionarios();        
@@ -149,6 +154,13 @@ export class FuncionarioComponent {
       funcionario.Id = 0;
       funcionario.Telefone = dados["telefone"].value;      
       funcionario.Email = dados["email"].value;      
+      funcionario.CPF = dados["cpf"].value;
+      funcionario.NumeroOAB = dados["numeroOAB"].value;
+      funcionario.RG = dados["rg"].value;
+      funcionario.Nacionalidade = dados["nacionalidade"].value;
+      funcionario.EstadoCivil = dados["estadoCivil"].value;      
+      funcionario.Endereco = dados["endereco"].value;      
+
       funcionario.NomePropriedade = '';
       funcionario.Mensagem = '';
 
@@ -276,6 +288,12 @@ export class FuncionarioComponent {
           this.funcionarioForm.controls["name"].setValue(row.Nome);
           this.funcionarioForm.controls["telefone"].setValue(row.Telefone);
           this.funcionarioForm.controls["email"].setValue(row.Email);
+          this.funcionarioForm.controls["cpf"].setValue(row.CPF);
+          this.funcionarioForm.controls["numeroOAB"].setValue(row.NumeroOAB);
+          this.funcionarioForm.controls["rg"].setValue(row.RG);
+          this.funcionarioForm.controls["nacionalidade"].setValue(row.Nacionalidade);
+          this.funcionarioForm.controls["estadoCivil"].setValue(row.EstadoCivil);
+          this.funcionarioForm.controls["endereco"].setValue(row.Endereco);
           
           //Recupera as franquias do funcionario
           this.franquiaFuncionarioService.ObterFranquiaFuncionario(row.Id)

@@ -72,6 +72,10 @@ export class ClienteComponent implements OnInit {
         numeroCNH: ['', [Validators.required]],
         validadeCNH: ['', [Validators.required]],
         veiculoSelect: ['', [Validators.required]],
+        rg: ['', [Validators.required]],
+        estadoCivil: ['', [Validators.required]],
+        nacionalidade: ['', [Validators.required]],
+        profissao: ['', [Validators.required]]
       }
     )
     this.ListagemClientes();
@@ -161,7 +165,11 @@ export class ClienteComponent implements OnInit {
     cliente.CPF = dados["cpf"].value == "" ? null : dados["cpf"].value;
     cliente.Endereco = dados["endereco"].value;
     cliente.NumeroCNH = dados["numeroCNH"].value;
-    cliente.ValidadeCNH = dados["validadeCNH"].value.toLocaleString().substring(0, 10);
+    cliente.ValidadeCNH = dados["validadeCNH"].value.toLocaleString().substring(0, 10);  
+    cliente.RG = dados["rg"].value;
+    cliente.EstadoCivil = dados["estadoCivil"].value;
+    cliente.Nacionalidade = dados["nacionalidade"].value;
+    cliente.Profissao = dados["profissao"].value;    
 
     cliente.NomePropriedade = '';
     cliente.Mensagem = '';
@@ -280,7 +288,11 @@ export class ClienteComponent implements OnInit {
             endereco: row.Endereco,
             dataNascimento: row.DataNascimento.toLocaleString().substring(0, 10),
             numeroCNH: row.NumeroCNH,
-            validadeCNH: row.ValidadeCNH.toLocaleString().substring(0, 10)
+            validadeCNH: row.ValidadeCNH.toLocaleString().substring(0, 10),
+            rg: row.RG,
+            estadoCivil: row.EstadoCivil,
+            nacionalidade: row.Nacionalidade,
+            profissao: row.Profissao
           }
         );
 

@@ -1,19 +1,22 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { DynamicModalComponent } from './dynamic-modal.component';
+import { DocxGeneratorComponent } from './docx-generator.component';
+import { HelloComponent } from './hello-component';
+
 
 @NgModule(
     {
         providers: [],
         declarations: [
-            DynamicModalComponent],
+            DocxGeneratorComponent,
+            HelloComponent],
         imports: [CommonModule,
             FormsModule],
         exports:[
-            DynamicModalComponent
+            DocxGeneratorComponent
         ]
     }
 )
 
-export class DynamicModalModule { }
+export class DocxGeneratorModule { }

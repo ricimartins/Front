@@ -252,7 +252,7 @@ export class ArgumentoComponent {
             multaArgumento.Mensagem = '';
             multaArgumento.NomePropriedade = '';
 
-            //cadastra o veículo 
+            //cadastra as multas do argumento 
             this.multaArgumentoService.AdicionarMultaArgumento(multaArgumento)
               .subscribe((response: MultaArgumento) => {
 

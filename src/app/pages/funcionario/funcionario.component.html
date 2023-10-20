@@ -26,11 +26,79 @@
 
                 <div class="row">
                     <div class="group-row">
+                        <label>CPF</label>
+                        <input type="text" name="cpf" id="cpf" placeholder="CPF" formControlName="cpf" required
+                            mask="(99) 99999999?9 " />
+                        <label class="error-input" *ngIf="funcionarioForm.get('cpf')?.errors?.['required'] &&
+                            funcionarioForm.get('cpf')?.touched">
+                            Campo Obrigatório!
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="group-row">
+                        <label>RG</label>
+                        <input type="text" name="rg" id="rg" placeholder="RG" formControlName="rg" required/>
+                        <label class="error-input" *ngIf="funcionarioForm.get('rg')?.errors?.['required'] &&
+                            funcionarioForm.get('rg')?.touched">
+                            Campo Obrigatório!
+                        </label>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="group-row">
+                        <label>Estado civil</label>
+                        <input type="text" name="estadoCivil" id="estadoCivil" placeholder="Estado Civil" formControlName="estadoCivil" required/>
+                        <label class="error-input" *ngIf="funcionarioForm.get('estadoCivil')?.errors?.['required'] &&
+                            funcionarioForm.get('estadoCivil')?.touched">
+                            Campo Obrigatório!
+                        </label>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="group-row">
+                        <label>Nacionalidade</label>
+                        <input type="text" name="nacionalidade" id="nacionalidade" placeholder="Nacionalidade" formControlName="nacionalidade" required/>
+                        <label class="error-input" *ngIf="funcionarioForm.get('nacionalidade')?.errors?.['required'] &&
+                            funcionarioForm.get('nacionalidade')?.touched">
+                            Campo Obrigatório!
+                        </label>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="group-row">
+                        <label>Número OAB</label>
+                        <input type="text" name="numeroOAB" id="numeroOAB" placeholder="Número OAB" formControlName="numeroOAB" required/>
+                        <label class="error-input" *ngIf="funcionarioForm.get('numeroOAB')?.errors?.['required'] &&
+                            funcionarioForm.get('numeroOAB')?.touched">
+                            Campo Obrigatório!
+                        </label>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="group-row">
                         <label>Telefone</label>
                         <input type="text" name="telefone" id="telefone" placeholder="Telefone"
                             formControlName="telefone" required />
                         <label class="error-input" *ngIf="funcionarioForm.get('telefone')?.errors?.['required'] &&
                     funcionarioForm.get('telefone')?.touched">
+                            Campo Obrigatório!
+                        </label>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="group-row">
+                        <label>Endereço completo</label>
+                        <input type="text" name="endereco" id="endereco" placeholder="Endereço"
+                            formControlName="endereco" required />
+                        <label class="error-input" *ngIf="funcionarioForm.get('endereco')?.errors?.['required'] &&
+                            funcionarioForm.get('endereco')?.touched">
                             Campo Obrigatório!
                         </label>
                     </div>

@@ -14,6 +14,12 @@ import { Cliente } from 'src/app/models/Cliente';
 import { VeiculoClienteService } from 'src/app/services/veiculocliente.service';
 import { VeiculoCliente } from 'src/app/models/VeiculoCliente';
 import { ActivatedRoute, EventType, Router } from '@angular/router';
+import { TemplateArgumento, TemplateDefesa } from 'src/app/models/TemplateDefesa';
+import { DocumentCreatorNew } from 'src/app/components/docx-generator/cv-generator_new';
+import { Packer } from 'docx';
+import { saveAs } from 'file-saver';
+import { FuncionarioService } from 'src/app/services/funcionario.service';
+import { Funcionario } from 'src/app/models/Funcionario';
 
 @Component({
   selector: 'infracao',
@@ -25,7 +31,7 @@ export class InfracaoComponent {
   constructor(public menuService: MenuService, public formBuilder: FormBuilder,
     public VeiculoService: VeiculoService, public authService: AuthService,
     public infracaoService: InfracaoService, public MultaService: MultaService, public ClienteService: ClienteService,
-    public VeiculoClienteService: VeiculoClienteService, private router: Router,
+    public VeiculoClienteService: VeiculoClienteService, private router: Router, public FuncionarioService: FuncionarioService,
     private route: ActivatedRoute) { }
 
 
@@ -43,7 +49,7 @@ export class InfracaoComponent {
   listVeiculo: Array<Veiculo>;
   dropdownListVeiculo = [];
   selectedVeiculo = [];
-  dropdownSettingsVeiculo = {};  
+  dropdownSettingsVeiculo = {};
 
   listCliente: Array<Cliente>;
   dropdownListCliente = [];
@@ -54,6 +60,11 @@ export class InfracaoComponent {
   dropdownListMulta = [];
   selectedMulta = [];
   dropdownSettingsMulta = {};
+
+  action: string = '';
+  dados: TemplateDefesa;
+  funcionarioId :number;  
+  infracao : Infracao;
 
   //#endregion
 
@@ -74,6 +85,7 @@ export class InfracaoComponent {
     this.ListagemInfracoes();
     this.configpag();
     this.DropDownConfig();
+    this.BuscaFuncionario();
   }
 
 
@@ -191,28 +203,29 @@ export class InfracaoComponent {
 
     var dados = this.dadosForm();
 
-    let infracao = new Infracao();
-    infracao.Id = 0;
-    infracao.Pontuacao = dados["pontuacao"].value;
-    infracao.Data = dados["data"].value;    
+    this.infracao = new Infracao();
+    this.infracao.Id = 0;
+    this.infracao.Pontuacao = dados["pontuacao"].value;
+    this.infracao.Data = dados["data"].value;
+    this.infracao.FuncionarioId = this.funcionarioId;
 
     this.selectedCliente.forEach((currentValue, index) => {
-      infracao.ClienteId = currentValue.Id;
+      this.infracao.ClienteId = currentValue.Id;
     });
     this.selectedVeiculo.forEach((currentValue, index) => {
-      infracao.VeiculoId = currentValue.Id;
+      this.infracao.VeiculoId = currentValue.Id;
     });
     this.selectedMulta.forEach((currentValue, index) => {
-      infracao.MultaId = currentValue.Id;
+      this.infracao.MultaId = currentValue.Id;
     });
 
-    infracao.NomePropriedade = '';
-    infracao.Mensagem = '';
+    this.infracao.NomePropriedade = '';
+    this.infracao.Mensagem = '';
 
     if (action === 'edit') {
       //Recupero o Id do registro que está em edição
-      infracao.Id = this.rowId;
-      this.infracaoService.AtualizarInfracao(infracao)
+      this.infracao.Id = this.rowId;
+      this.infracaoService.AtualizarInfracao(this.infracao)
         .subscribe((response: Infracao) => {
 
           alert('Alterado com sucesso!')
@@ -222,7 +235,7 @@ export class InfracaoComponent {
           () => { })
     }
     else {
-      this.infracaoService.AdicionarInfracao(infracao)
+      this.infracaoService.AdicionarInfracao(this.infracao)
         .subscribe((response: Infracao) => {
 
           alert('Cadastrado com sucesso!')
@@ -265,7 +278,7 @@ export class InfracaoComponent {
           this.listVeiculo.push(currentValue.Veiculo);
         });
 
-        this.dropdownListVeiculo = this.listVeiculo;        
+        this.dropdownListVeiculo = this.listVeiculo;
 
       }, (error) => console.error(error),
         () => { })
@@ -283,7 +296,7 @@ export class InfracaoComponent {
     this.selectedCliente = this.selectedCliente.filter((el) => el !== item);
     this.listVeiculo = new Array<Veiculo>();
     this.selectedVeiculo = [];
-    this.dropdownListVeiculo = this.listVeiculo;    
+    this.dropdownListVeiculo = this.listVeiculo;
   }
 
   //Veiculo
@@ -327,10 +340,11 @@ export class InfracaoComponent {
   }
 
   OnClickDefesa(row) {
+
     this.router.navigate(
       ['/defesa'],
-      { queryParams: { 'clienteId': row.Id, 'action': 'new' } }
-    );    
+      { queryParams: { 'id': row.Id, 'action': 'new' } }
+    );
   }
 
   loadCadastro(row: any) {
@@ -350,15 +364,54 @@ export class InfracaoComponent {
           }
         );
 
-        this.selectedCliente = new Array<Cliente>();        
+        this.selectedCliente = new Array<Cliente>();
         this.selectedCliente.push(row.Cliente);
         this.selectedVeiculo = new Array<Veiculo>();
         this.selectedVeiculo.push(row.Veiculo);
         this.selectedMulta = new Array<Multa>();
-        this.selectedMulta.push(row.Multa);                
+        this.selectedMulta.push(row.Multa);
 
       }, (error) => console.error(error),
         () => { })
   }
   //#endregion    
+
+  download(): void {
+
+    this.GeraDadosDocumento();
+    const documentCreator = new DocumentCreatorNew();
+    const doc = documentCreator.create([this.dados.Autoridade, this.dados.Assunto, this.dados.Cliente, this.dados.Argumento]);
+
+    Packer.toBlob(doc).then(blob => {
+      console.log(blob);
+      saveAs(blob, "example.docx");
+      console.log("Document created successfully");
+    });
+  }
+
+  GeraDadosDocumento() {
+    this.dados = new TemplateDefesa();
+    this.dados.Autoridade = "À Autoridade Competente do DETRAN para apreciar e julgar Defesa Prévia";
+    this.dados.Assunto = "Assunto: Apresentação de Defesa à autuação de trânsito de número TE00355137";
+    this.dados.Cliente = "DANRLEY BUZIKI DE VARGAS,brasileiro, solteiro(a), ESTUDANTE, portador do CPF nº 024.760.620-06, documento de identidade nº 2122436534, CNH nº 6975807606, residente e domiciliado na RUA EDACY MARTINS, nº 520, , Bairro SECULO XX, em CAXIAS DO SUL/Rio Grande do Sul, CEP 95057423, tendo sido autuado(a)pela condução do veículo de placas QUA9B82, RENAVAN nº 1194772614, representado(a) neste ato por seu procurador/sua procuradora RODRIGO DUTRA NUNES, brasileiro(a), casado(a), portador do CPF nº 964.702.910-15, documento de identidade nº 9064842934, OAB nº OAB/RS 103.736, escritório Avenida Ipiranga - Praia de Belas, Porto Alegre 40 sala 1610, 51997497224, onde recebe intimações e despachos, vem, com base no § 4º do art. 4º c/c art. 9º da Resolução nº 619/2016, Defesa Prévia à autuação de trânsito de número TE00355137 pelas seguintes razões:"
+
+    this.dados.Argumento = new Array<TemplateArgumento>();
+
+    this.dados.Argumento.push(
+      {
+        Descricao: "Titulo argumento 2",
+        Detalhe: "Teste de argumento 2"
+      }
+    );
+  }
+
+  BuscaFuncionario(){
+    this.FuncionarioService.ListarFuncionarioEmail(this.authService.getEmailUser())
+      .subscribe((response: Array<Funcionario>) => {
+        response.forEach((currentValue, index) => {
+          this.funcionarioId = currentValue.Id
+        });                
+      }, (error) => console.error(error),
+        () => { })
+  }
 }

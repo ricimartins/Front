@@ -12,6 +12,7 @@ import { NgMultiSelectDropDownModule } from "ng-multiselect-dropdown";
 import { MatTabsModule } from "@angular/material/tabs";
 import { MatButtonModule } from "@angular/material/button";
 import { MatMenuModule } from "@angular/material/menu";
+import { DocxGeneratorModule } from "src/app/components/docx-generator/docx-generator.module";
 
 @NgModule(
     {   
@@ -31,7 +32,8 @@ import { MatMenuModule } from "@angular/material/menu";
             MatTabsModule,
             MatIconModule,
             MatButtonModule,
-            MatMenuModule
+            MatMenuModule,
+            DocxGeneratorModule
         ]
     }
 )

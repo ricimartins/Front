@@ -46,6 +46,5 @@ export class FuncionarioService
     DeleteFuncionario(id:number)
     {
         return this.httpClient.delete(`${this.baseUrl}/DeleteFuncionario?Id=${id}`);
-    }    
-
+    }         
 }

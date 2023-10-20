@@ -10,4 +10,8 @@ export class Cliente extends Base
     DataNascimento: Date;    
     NumeroCNH: string;
     ValidadeCNH: Date;
+    RG: string;
+    EstadoCivil: string;
+    Nacionalidade: string;
+    Profissao: string;
 }

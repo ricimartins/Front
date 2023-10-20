@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Defesa } from 'src/app/models/Defesa';
 import { SelectModel } from 'src/app/models/selectModel';
@@ -6,12 +6,20 @@ import { AuthService } from 'src/app/services/auth.service';
 import { DefesaService } from 'src/app/services/defesa.service';
 import { MenuService } from 'src/app/services/menu.service';
 import { ArgumentoService } from 'src/app/services/argumento.service';
+import { ArgumentoDefesaService } from 'src/app/services/argumentodefesa.service';
 import { Argumento } from 'src/app/models/Argumento';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Multa } from 'src/app/models/Multa';
 import { MultaService } from 'src/app/services/multa.service';
 import { MultaArgumentoService } from 'src/app/services/multaargumento.service';
+import { InfracaoService } from 'src/app/services/infracao.service';
 import { MultaArgumento } from 'src/app/models/MultaArgumento';
+import { TemplateArgumento, TemplateDefesa } from 'src/app/models/TemplateDefesa';
+import { DocumentCreatorNew } from 'src/app/components/docx-generator/cv-generator_new';
+import { Packer } from 'docx';
+import { saveAs } from 'file-saver';
+import { Infracao } from 'src/app/models/Infracao';
+import { ArgumentoDefesa } from 'src/app/models/ArgumentoDefesa';
 
 @Component({
   selector: 'defesa',
@@ -25,7 +33,8 @@ export class DefesaComponent {
     public authService: AuthService, public DefesaService: DefesaService,
     private ArgumentoService: ArgumentoService, private router: Router,
     private route: ActivatedRoute, private MultaService: MultaService,
-    private MultaArgumentoService: MultaArgumentoService) { }
+    private MultaArgumentoService: MultaArgumentoService, public InfracaoService: InfracaoService,
+    private ArgumentoDefesaService: ArgumentoDefesaService) { }
 
 
 
@@ -41,31 +50,48 @@ export class DefesaComponent {
   config: any;
   paginacao: boolean = true;
   itemsPorPagina: number = 10
+
+  infracao: Array<Infracao>;
+
   listArgumento: Array<Argumento>;
   dropdownListArgumento = [];
   selectedArgumento = [];
   dropdownSettingsArgumento = {};
 
-  listMulta: Array<Multa>;
-  dropdownListMulta = [];
-  selectedMulta = [];
-  dropdownSettingsMulta = {};
-
   action: string = "";
+  dadosDocumento: TemplateDefesa;
+  infracaoId: number;
   //#endregion
 
 
   ngOnInit() {
     debugger;
     this.menuService.menuSelecionado = 10;
+
     this.defesaForm = this.formBuilder.group(
       {
-        ArgumentoSelect: ['', [Validators.required]]
+        ArgumentoSelect: ['', [Validators.required]],
+        numero: ['', [Validators.required]]
       }
     )
+
+
+    this.route.queryParamMap
+      .subscribe(params => {
+        this.action = params.get('action');
+        if (this.action == 'new') {
+          this.infracaoId = parseInt(params.get('id'));
+          this.tipoTela = 2;
+          this.ObterInfracao(this.infracaoId);
+        }
+        else {
+          this.ListagemDefesas();
+        }
+      });
+
     this.DropDownConfig();
-    this.ListagemDefesas();
     this.configpag();
+
     this.argumentoHTML = '';
   }
 
@@ -81,18 +107,6 @@ export class DefesaComponent {
       allowSearchFilter: true,
       searchPlaceholderText: "Procurar",
       noDataAvailablePlaceholderText: "Argumento não cadastrado"
-    };
-
-    this.dropdownSettingsMulta = {
-      singleSelection: true,
-      idField: 'Id',
-      textField: 'Descricao',
-      selectAllText: 'Marcar todos',
-      unSelectAllText: 'Desmarcar todos',
-      clientesShowLimit: 1,
-      allowSearchFilter: true,
-      searchPlaceholderText: "Procurar",
-      noDataAvailablePlaceholderText: "Multa não cadastrada"
     };
 
   }
@@ -120,9 +134,9 @@ export class DefesaComponent {
 
   cadastro() {
     this.tipoTela = 2;
-    this.ListagemMulta();
     this.defesaForm.reset();
     this.selectedArgumento = new Array<Argumento>;
+    this.ListarArgumento();
   }
 
   mudarItemsPorPage() {
@@ -166,19 +180,18 @@ export class DefesaComponent {
       .subscribe(params => {
         action = params.get('action');
       });
+
     var dados = this.dadosForm();
 
     let item = new Defesa();
     item.Id = 0;
-    // item.Codigo = dados["codigo"].value
-    // item.Descricao = dados["descricao"].value
+    item.Data = new Date();
+    item.Numero = dados["numero"].value
+    item.InfracaoId = this.infracaoId;
 
     item.NomePropriedade = '';
     item.Mensagem = '';
 
-    // this.selectedArgumento.forEach((currentValue, index) => {
-    //   item.ArgumentoId = currentValue.Id;
-    // });
 
     if (action === 'edit') {
       //Recupero o Id do registro que está em edição
@@ -196,13 +209,30 @@ export class DefesaComponent {
       this.DefesaService.AdicionarDefesa(item)
         .subscribe((response: Defesa) => {
 
+          this.selectedArgumento.forEach((currentValue, index) => {
+
+            var argumentoDefesa = new ArgumentoDefesa();
+            argumentoDefesa.Id = 0;
+            argumentoDefesa.DefesaId = response.Id;
+            argumentoDefesa.ArgumentoId = currentValue.Id;
+
+            argumentoDefesa.Mensagem = '';
+            argumentoDefesa.NomePropriedade = '';
+
+            //cadastra os argumentos da defesa
+            this.ArgumentoDefesaService.AdicionarArgumentoDefesa(argumentoDefesa)
+              .subscribe((response: ArgumentoDefesa) => {
+
+              }, (error) => console.error(error),
+                () => { })
+
+          });
+
           alert('Cadastrado com sucesso!')
           this.ListagemDefesas();
 
         }, (error) => console.error(error),
           () => { })
-
-
     }
   }
 
@@ -216,6 +246,20 @@ export class DefesaComponent {
           this.listArgumento.push(currentValue.Argumento);
         });
 
+        this.dropdownListArgumento = this.listArgumento;
+      }
+      )
+  }
+
+  ListarArgumento() {
+
+    this.ArgumentoService.ListarArgumento()
+      .subscribe((response: Array<Argumento>) => {
+
+        this.listArgumento = new Array<Argumento>();
+        response.forEach((currentValue, index) => {
+          this.listArgumento.push(currentValue);
+        });
         this.dropdownListArgumento = this.listArgumento;
       }
       )
@@ -243,34 +287,39 @@ export class DefesaComponent {
     this.selectedArgumento = new Array<Argumento>();
     this.ArgumentoHTML();
   }
-
-  //Multa
-  onItemSelectMulta(item: any) {
-    this.ListarArgumentoByMulta(item.Id);
-    this.selectedArgumento = [];
-  }
-
-  onDeSelectMulta(item: any) {
-    this.selectedMulta = this.selectedMulta.filter((el) => el !== item);
-    this.listArgumento = new Array<Argumento>();
-    this.selectedArgumento = [];
-    this.dropdownListArgumento = this.listArgumento;
-  }
   //#endregion
 
   ArgumentoHTML() {
     this.argumentoHTML = '';
-    let posicao =
-      this.selectedArgumento.forEach((currentValue, index) => {
 
-        //Titulo
-        this.argumentoHTML = this.argumentoHTML.concat('<h1>Ordem: ');
-        this.argumentoHTML = this.argumentoHTML.concat((index + 1).toString());
-        this.argumentoHTML = this.argumentoHTML.concat('</h1>');
-        this.argumentoHTML = this.argumentoHTML.concat('<h3>');
-        this.argumentoHTML = this.argumentoHTML.concat(currentValue.Descricao);
-        this.argumentoHTML = this.argumentoHTML.concat('</h3>');
-      });
+    this.selectedArgumento.forEach((currentValue, index) => {
+
+      this.ArgumentoService.ObterArgumento(currentValue.Id)
+        .subscribe((response: Array<Argumento>) => {
+          this.argumentoHTML = this.argumentoHTML.concat('<h1>Ordem: ');
+          this.argumentoHTML = this.argumentoHTML.concat((index + 1).toString());
+          this.argumentoHTML = this.argumentoHTML.concat('</h1>');
+          this.argumentoHTML = this.argumentoHTML.concat('<h2>');
+          this.argumentoHTML = this.argumentoHTML.concat(currentValue.Descricao);
+          this.argumentoHTML = this.argumentoHTML.concat('</h2>');
+          this.argumentoHTML = this.argumentoHTML.concat('<h3>');
+          this.argumentoHTML = this.argumentoHTML.concat(response[0].Detalhe);
+          this.argumentoHTML = this.argumentoHTML.concat('</h3>');
+        });
+
+    });
+
+    // let posicao =
+    //   this.selectedArgumento.forEach((currentValue, index) => {
+
+    //     //Titulo
+    //     this.argumentoHTML = this.argumentoHTML.concat('<h1>Ordem: ');
+    //     this.argumentoHTML = this.argumentoHTML.concat((index + 1).toString());
+    //     this.argumentoHTML = this.argumentoHTML.concat('</h1>');
+    //     this.argumentoHTML = this.argumentoHTML.concat('<h3>');
+    //     this.argumentoHTML = this.argumentoHTML.concat(currentValue.Descricao);
+    //     this.argumentoHTML = this.argumentoHTML.concat('</h3>');
+    //   });
   }
 
 
@@ -298,7 +347,6 @@ export class DefesaComponent {
   loadCadastro(row: any) {
 
     this.tipoTela = 2;
-    this.ListagemMulta();
     this.DefesaService.ObterDefesa(row.Id)
       .subscribe((response: Array<Defesa>) => {
         this.rowId = row.Id;
@@ -325,16 +373,101 @@ export class DefesaComponent {
       }, (error) => console.error(error),
         () => { })
   }
-  //#endregion    
+  //#endregion      
 
-  ListagemMulta() {
+  ObterInfracao(id) {
 
-    this.MultaService.ListarMulta()
-      .subscribe((response: Array<Multa>) => {
-
-        this.listMulta = response;
-        this.dropdownListMulta = this.listMulta;
+    this.InfracaoService.ObterInfracao(id)
+      .subscribe((response: Array<Infracao>) => {
+        response.forEach((currentValue, index) => {
+          this.infracao = response;
+          this.ListarArgumentoByMulta(currentValue.Multa.Id)
+        });
       }
       )
+  }
+
+  ListarInfracao() {
+
+    this.InfracaoService.ListarInfracao()
+      .subscribe((response: Array<Infracao>) => {
+        response.forEach((currentValue, index) => {
+          this.infracao = response;
+          this.ListarArgumentoByMulta(currentValue.Multa.Id)
+        });
+      }
+      )
+  }
+
+  download(): void {
+
+    this.dadosDocumento = new TemplateDefesa();
+    var dados = this.dadosForm();
+    this.infracao.forEach((currentValue, index) => {
+
+      this.dadosDocumento.Autoridade = ("À Autoridade Competente do ").concat(currentValue.Multa.OrgaoAutuador.Nome).concat(" para apreciar e julgar Defesa Prévia");
+      this.dadosDocumento.Assunto = ("Assunto: Apresentação de Defesa à autuação de trânsito de número ").concat(dados["numero"].value);
+      this.dadosDocumento.Cliente =
+        (currentValue.Cliente.Nome)
+          .concat(", ")
+          .concat(currentValue.Cliente.Nacionalidade)
+          .concat(", ")
+          .concat(currentValue.Cliente.EstadoCivil)
+          .concat(", ")
+          .concat(currentValue.Cliente.Profissao)
+          .concat(", portador do CPF nº ")
+          .concat(currentValue.Cliente.CPF)
+          .concat(", documento de identidade nº ")
+          .concat(currentValue.Cliente.RG)
+          .concat(", residente e domiciliado na ")
+          .concat(currentValue.Cliente.Endereco)
+          .concat(", tendo sido autuado(a) pela conducão do veículo de placas ")
+          .concat(currentValue.Veiculo.Placa)
+          .concat(", RENAVAN nº ")
+          .concat(currentValue.Veiculo.Renavam)
+          .concat(", representado(a) nesse ato por seu procurador/sua procuradora ")
+          .concat(currentValue.Funcionario.Nome)
+          .concat(", ")
+          .concat(currentValue.Funcionario.Nacionalidade)
+          .concat(", ")
+          .concat(currentValue.Funcionario.EstadoCivil)
+          .concat(", portador do CPF nº ")
+          .concat(currentValue.Funcionario.CPF)
+          .concat(", documento de identidade nº ")
+          .concat(currentValue.Funcionario.RG)
+          .concat(", OAB nº ")
+          .concat(currentValue.Funcionario.NumeroOAB)
+          .concat(", residente e domiciliado na ")
+          .concat(currentValue.Funcionario.Endereco) // TO DO precisa refatorar filial para conseguir pegar o endereço do escritório
+          .concat(",  onde recebe intimações e despachos, vem, com base no § 4º do art. 4º c/c art. 9º da Resolução nº 619/2016, Defesa Prévia à autuação de trânsito de número ")
+          .concat(dados["numero"].value)
+          .concat(" pelas seguintes razões ");
+
+
+      this.dadosDocumento.Argumento = new Array<TemplateArgumento>();
+      this.selectedArgumento.forEach((currentValue, index) => {
+
+        this.ArgumentoService.ObterArgumento(currentValue.Id)
+          .subscribe((response: Array<Argumento>) => {
+            this.dadosDocumento.Argumento.push(
+              {
+                Descricao: currentValue.Descricao,
+                Detalhe: this.listArgumento.find(x => x.Id === currentValue.Id).Detalhe
+              }
+            );
+          });
+      });
+
+    });
+
+
+    const documentCreator = new DocumentCreatorNew();
+    const doc = documentCreator.create([this.dadosDocumento.Autoridade, this.dadosDocumento.Assunto, this.dadosDocumento.Cliente, this.dadosDocumento.Argumento]);
+
+    Packer.toBlob(doc).then(blob => {
+      console.log(blob);
+      saveAs(blob, "example.docx");
+      console.log("Document created successfully");
+    });
   }
 }
