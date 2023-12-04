@@ -15,7 +15,7 @@ export class OrgaoAutuadorService {
     private readonly baseUrl = environment["endPoint"];
 
     AdicionarOrgaoAutuador(orgaoautuador: OrgaoAutuador) {
-        debugger
+        
         return this.httpClient.post<OrgaoAutuador>(`${this.baseUrl}/AdicionarOrgaoAutuador`,
             orgaoautuador);
     }

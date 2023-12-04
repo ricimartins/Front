@@ -22,9 +22,9 @@ export class FranquiaFuncionarioService
             franquiafuncionario);
     }
 
-    ListaFranquiaFuncionariosUsuario(emailUsuario:string)
+    ListaFranquiaFuncionarioByEmail(emailUsuario:string)
     {
-        return this.httpClient.get(`${this.baseUrl}/ListaFranquiaFuncionariosUsuario?emailUsuario=${emailUsuario}`);
+        return this.httpClient.get(`${this.baseUrl}/ListaFranquiaFuncionarioByEmail?email=${emailUsuario}`);
     }
 
     CadastrarUsuarioNoFranquiaFuncionario(IdFranquiaFuncionario:number, emailUsuario:string)

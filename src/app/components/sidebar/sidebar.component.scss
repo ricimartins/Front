@@ -1,6 +1,6 @@
 .container-sidebar {
-    position: fixed;
-    padding-top: 72px;
+    position: absolute;
+    padding-top: 10px;
     width: 150px;
     min-height: 700px;
     height: -webkit-fill-available;
@@ -20,7 +20,7 @@
     .caixa-menu 
     {
         width: 130px;
-        height: 42px;
+        height: 40px;
         border-radius: 4px;
         background: rgba(128, 128, 128, 0.614);
         cursor: pointer;

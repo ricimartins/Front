@@ -18,7 +18,7 @@ export class FranquiaService
     
     AdicionarFranquia(franquia:Franquia)
     {
-        debugger
+        
         return this.httpClient.post<Franquia> (`${this.baseUrl}/AdicionarFranquia`,
             franquia);
     }

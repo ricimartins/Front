@@ -140,7 +140,7 @@ export class OrgaoAutuadorComponent {
         .subscribe((response: OrgaoAutuador) => {
 
           this.orgaoautuadorForm.reset();
-          debugger
+          
 
         }, (error) => console.error(error),
           () => { })

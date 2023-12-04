@@ -1,3 +1,12 @@
 <div class="container-navbar">
-    
+    <div class="content-select">
+        < <mat-form-field>
+            <!-- <mat-label>Empresa selecionada</mat-label> -->
+            <mat-select disableRipple [value]="listFranquia" placeholder="Selecione uma empresa...">
+                <mat-option *ngFor="let item of listFranquia" [value]="item.Franquia.Id" (onSelectionChange)="onSelect($event)" >
+                    {{item.Franquia.Nome}}
+                </mat-option>
+            </mat-select>
+            </mat-form-field>
+    </div>
 </div>

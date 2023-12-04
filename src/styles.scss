@@ -76,13 +76,14 @@ label {}
 
 .container-base {
   padding: 88px 16px 0px 168px;
+  padding-top: 10px;
   //border: 10px solid #ccd4db;
 
   .content-page {
     //border: 10px solid #ccd4db;
     background: white;
     padding: 16px;
-    border-radius: 2px;
+    border-radius: 5px;
     min-height: auto;
     min-width: auto;
 

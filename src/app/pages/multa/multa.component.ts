@@ -40,7 +40,7 @@ export class MultaComponent {
 
 
   ngOnInit() {
-    debugger
+    
     this.menuService.menuSelecionado = 7;
 
     this.multaForm = this.formBuilder.group(

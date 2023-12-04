@@ -22,7 +22,7 @@ export class HomeComponent {
   //#endregion
 
   ngOnInit() {
-    debugger
+    
     this.menuService.menuSelecionado = 1;
   }
 

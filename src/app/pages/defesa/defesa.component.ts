@@ -65,7 +65,7 @@ export class DefesaComponent {
 
 
   ngOnInit() {
-    debugger;
+    ;
     this.menuService.menuSelecionado = 10;
 
     this.defesaForm = this.formBuilder.group(
@@ -421,7 +421,7 @@ export class DefesaComponent {
           .concat(currentValue.Cliente.RG)
           .concat(", residente e domiciliado na ")
           .concat(currentValue.Cliente.Endereco)
-          .concat(", tendo sido autuado(a) pela conducão do veículo de placas ")
+          .concat(", tendo sido autuado(a) pela condução do veículo de placas ")
           .concat(currentValue.Veiculo.Placa)
           .concat(", RENAVAN nº ")
           .concat(currentValue.Veiculo.Renavam)
